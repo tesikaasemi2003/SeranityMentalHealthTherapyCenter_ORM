@@ -125,4 +125,19 @@ public class PatientDAOImpl implements PatientDAO {
             session.close();
         }
     }
+    @Override
+    public String generateNextId() throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            String lastId = session.createQuery(
+                            "SELECT p.id FROM Patient p ORDER BY p.id DESC", String.class)
+                    .setMaxResults(1)
+                    .uniqueResult();
+            if (lastId == null) return "P001";
+            int num = Integer.parseInt(lastId.substring(1)) + 1;
+            return String.format("P%03d", num);
+        } finally {
+            session.close();
+        }
+    }
 }

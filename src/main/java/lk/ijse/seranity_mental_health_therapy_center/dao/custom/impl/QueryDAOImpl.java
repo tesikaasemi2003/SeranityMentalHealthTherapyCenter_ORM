@@ -38,4 +38,5 @@ public class QueryDAOImpl implements SuperDAO {
             session.close();
         }
     }
+
 }

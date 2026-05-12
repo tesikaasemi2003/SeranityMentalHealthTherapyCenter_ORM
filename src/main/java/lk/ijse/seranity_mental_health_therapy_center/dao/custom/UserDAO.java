@@ -10,4 +10,6 @@ public interface UserDAO extends CrudDAO<User> {
 
     // Username already exists ද check කරන්න
     boolean isUsernameExists(String username) throws Exception;
+
+    User getUserByUsername(String username) throws Exception;
 }

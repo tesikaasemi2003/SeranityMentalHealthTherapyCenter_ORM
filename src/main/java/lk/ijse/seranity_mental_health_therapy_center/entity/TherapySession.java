@@ -22,8 +22,14 @@ public class TherapySession {
     @Column(name = "session_date", nullable = false)
     private LocalDate sessionDate;
 
-    @Column(name = "session_time")
-    private LocalTime sessionTime;
+    @Column(name = "start_time")
+    private LocalTime startTime;
+
+    @Column(name = "end_time")
+    private LocalTime endTime;
+
+    @Column(name = "notes", columnDefinition = "TEXT")
+    private String notes;
 
     @Column(name = "status")
     private String status; // "SCHEDULED", "COMPLETED", "CANCELLED"
@@ -37,9 +43,4 @@ public class TherapySession {
     @ManyToOne
     @JoinColumn(name = "therapist_id", nullable = false)
     private Therapist therapist;
-
-    // Owning side — FK = program_id
-    @ManyToOne
-    @JoinColumn(name = "program_id", nullable = false)
-    private TherapyProgram therapyProgram;
 }

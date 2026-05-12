@@ -126,4 +126,38 @@ public class UserDAOImpl implements UserDAO {
             session.close();
         }
     }
+
+    @Override
+    public User getUserByUsername(String username) throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            User user = session.createQuery(
+                            "FROM User WHERE username = :username", User.class)
+                    .setParameter("username", username)
+                    .uniqueResult();
+            transaction.commit();
+            return user;
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+    @Override
+    public String generateNextId() throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            String lastId = session.createQuery(
+                            "SELECT u.id FROM User u ORDER BY u.id DESC", String.class)
+                    .setMaxResults(1).uniqueResult();
+            if (lastId == null) return "U001";
+            int num = Integer.parseInt(lastId.substring(1)) + 1;
+            return String.format("U%03d", num);
+        } finally {
+            session.close();
+        }
+    }
 }

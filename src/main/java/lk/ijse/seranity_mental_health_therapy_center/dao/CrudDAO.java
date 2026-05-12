@@ -15,4 +15,6 @@ public interface CrudDAO<T> {
     List<T> getAll() throws Exception;
 
     String getNextId() throws Exception;
+
+    String generateNextId() throws Exception;
 }

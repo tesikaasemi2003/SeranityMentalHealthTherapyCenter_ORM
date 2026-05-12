@@ -21,18 +21,20 @@ public class TherapyProgram {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "duration")
-    private String duration;
-
-    @Column(name = "fee")
-    private double fee;
-
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "therapyProgram", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    private List<Registration> registrations;
+    @Column(name = "duration_weeks", nullable = false)
+    private int durationWeeks;
+
+    @Column(name = "fee", nullable = false)
+    private double fee;
+
+    // Owning side — FK = therapist_id
+    @ManyToOne
+    @JoinColumn(name = "therapist_id")
+    private Therapist therapist;
 
     @OneToMany(mappedBy = "therapyProgram", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TherapySession> therapySessions;
+    private List<Registration> registrations;
 }

@@ -112,4 +112,18 @@ public class TherapistDAOImpl implements TherapistDAO {
             session.close();
         }
     }
+    @Override
+    public String generateNextId() throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            String lastId = session.createQuery(
+                            "SELECT t.id FROM Therapist t ORDER BY t.id DESC", String.class)
+                    .setMaxResults(1).uniqueResult();
+            if (lastId == null) return "T001";
+            int num = Integer.parseInt(lastId.substring(1)) + 1;
+            return String.format("T%03d", num);
+        } finally {
+            session.close();
+        }
+    }
 }

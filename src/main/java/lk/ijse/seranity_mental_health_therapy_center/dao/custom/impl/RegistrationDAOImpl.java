@@ -128,4 +128,18 @@ public class RegistrationDAOImpl implements RegistrationDAO {
             session.close();
         }
     }
+    @Override
+    public String generateNextId() throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            String lastId = session.createQuery(
+                            "SELECT r.id FROM Registration r ORDER BY r.id DESC", String.class)
+                    .setMaxResults(1).uniqueResult();
+            if (lastId == null) return "REG001";
+            int num = Integer.parseInt(lastId.substring(3)) + 1;
+            return String.format("REG%03d", num);
+        } finally {
+            session.close();
+        }
+    }
 }

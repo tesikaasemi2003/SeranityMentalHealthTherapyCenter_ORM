@@ -9,7 +9,7 @@ module lk.ijse.seranity_mental_health_therapy_center {
     requires java.sql;
     requires java.naming;
 
-    requires org.mindrot.jbcrypt;
+    //requires org.mindrot.jbcrypt;
     requires jakarta.mail;
     requires net.sf.jasperreports.core;
 
