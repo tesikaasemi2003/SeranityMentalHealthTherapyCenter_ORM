@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="lk.ijse.seranity_mental_health_therapy_center.controller.UserController"
+            style="-fx-background-color:#F0F4FF;">
+
+    <VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <HBox alignment="CENTER_LEFT" spacing="12"
+              style="-fx-background-color:white;-fx-padding:16 24;
+                     -fx-border-color:#E0E8F8;-fx-border-width:0 0 1 0;">
+            <Label fx:id="lblMessage" style="-fx-font-size:13px;-fx-font-weight:bold;"
+                   visible="false" managed="false"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="+ Add User" onAction="#handleClear"
+                    style="-fx-background-color:#2B3990;-fx-text-fill:white;
+                           -fx-background-radius:8;-fx-padding:9 20;-fx-font-size:13px;-fx-cursor:hand;"/>
+        </HBox>
+
+        <HBox spacing="20" style="-fx-padding:0 24 24 24;" VBox.vgrow="ALWAYS">
+
+            <!-- Form -->
+            <VBox spacing="14" prefWidth="300"
+                  style="-fx-background-color:white;-fx-padding:24;-fx-background-radius:12;
+                         -fx-effect:dropshadow(gaussian,#D0D8F0,8,0,0,2);">
+                <Label text="User Details"
+                       style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#2B3990;
+                              -fx-padding:0 0 8 0;-fx-border-color:transparent transparent #E0E8F8 transparent;
+                              -fx-border-width:0 0 1 0;"/>
+
+                <VBox spacing="5">
+                    <Label text="User ID" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                    <TextField fx:id="txtId" editable="false"
+                               style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                      -fx-padding:8 12;-fx-font-size:13px;-fx-background-color:#f5f7fa;"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Username *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                    <TextField fx:id="txtUsername" promptText="Enter username"
+                               style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                      -fx-padding:8 12;-fx-font-size:13px;"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Password *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                    <HBox spacing="6">
+                        <PasswordField fx:id="txtPassword" promptText="Enter password"
+                                       HBox.hgrow="ALWAYS"
+                                       style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                              -fx-padding:8 12;-fx-font-size:13px;"/>
+                        <TextField fx:id="txtPasswordVisible" promptText="Enter password"
+                                   HBox.hgrow="ALWAYS" visible="false" managed="false"
+                                   style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                          -fx-padding:8 12;-fx-font-size:13px;"/>
+                        <Button fx:id="btnShowPass" text="👁" onAction="#handleTogglePassword"
+                                style="-fx-background-color:#e8eef8;-fx-background-radius:6;
+                                       -fx-padding:8 10;-fx-cursor:hand;-fx-font-size:13px;"/>
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Confirm Password *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                    <PasswordField fx:id="txtConfirmPassword" promptText="Confirm password"
+                                   style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                          -fx-padding:8 12;-fx-font-size:13px;"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Role *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                    <ComboBox fx:id="cmbRole" promptText="Select role" maxWidth="Infinity"
+                              style="-fx-background-radius:6;-fx-border-radius:6;
+                                     -fx-border-color:#dce3ec;-fx-font-size:13px;"/>
+                </VBox>
+
+                <!-- Change Password section (edit mode only) -->
+                <VBox fx:id="vboxChangePass" spacing="10" visible="false" managed="false"
+                      style="-fx-background-color:#f0f4ff;-fx-padding:12;-fx-background-radius:8;">
+                    <Label text="Change Password" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#2B3990;"/>
+                    <PasswordField fx:id="txtNewPassword" promptText="New password (leave blank to keep)"
+                                   style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                          -fx-padding:8 12;-fx-font-size:12px;"/>
+                </VBox>
+
+                <HBox spacing="10" style="-fx-padding:8 0 0 0;">
+                    <Button text="Clear" onAction="#handleClear"
+                            style="-fx-background-color:transparent;-fx-border-color:#2B3990;
+                                   -fx-border-radius:6;-fx-background-radius:6;-fx-text-fill:#2B3990;
+                                   -fx-padding:8 20;-fx-cursor:hand;"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button fx:id="btnSave" text="Save" onAction="#handleSave"
+                            style="-fx-background-color:#2B3990;-fx-background-radius:6;
+                                   -fx-text-fill:white;-fx-padding:8 20;-fx-cursor:hand;"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                </HBox>
+            </VBox>
+
+            <!-- Table -->
+            <VBox spacing="12" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color:white;-fx-padding:24;-fx-background-radius:12;
+                         -fx-effect:dropshadow(gaussian,#D0D8F0,8,0,0,2);">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="User List"
+                           style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#2B3990;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="txtSearch" promptText="🔍  Search..." prefWidth="200"
+                               style="-fx-background-radius:20;-fx-border-radius:20;
+                                      -fx-border-color:#dce3ec;-fx-padding:7 14;-fx-font-size:13px;"/>
+                </HBox>
+                <TableView fx:id="tblUser" VBox.vgrow="ALWAYS"
+                           style="-fx-background-color:transparent;-fx-border-color:#E0E8F8;-fx-border-radius:8;">
+                    <columns>
+                        <TableColumn fx:id="colId"       text="ID"       prefWidth="80"/>
+                        <TableColumn fx:id="colUsername" text="Username" prefWidth="180"/>
+                        <TableColumn fx:id="colRole"     text="Role"     prefWidth="150"/>
+                        <TableColumn fx:id="colAction"   text="Actions"  prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </HBox>
+    </VBox>
+</AnchorPane>

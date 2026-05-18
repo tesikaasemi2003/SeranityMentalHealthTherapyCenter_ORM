@@ -12,7 +12,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(
                 HelloApplication.class.getResource(
-                        "/lk/ijse/seranity_mental_health_therapy_center/Login.fxml"));
+                        "/lk/ijse/seranity_mental_health_therapy_center/view/login.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
 

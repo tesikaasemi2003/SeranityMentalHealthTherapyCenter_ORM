@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RegistrationDAO extends CrudDAO<Registration> {
 
-    // Patient ID ගෙන් registrations ගන්න
+
     List<Registration> getRegistrationsByPatientId(String patientId) throws Exception;
 
     // Patient already registered ද check කරන්න

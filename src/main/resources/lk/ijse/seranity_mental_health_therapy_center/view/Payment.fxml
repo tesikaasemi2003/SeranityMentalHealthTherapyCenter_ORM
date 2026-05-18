@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="lk.ijse.seranity_mental_health_therapy_center.controller.PaymentController"
+            style="-fx-background-color:#F0F4FF;">
+
+    <VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <HBox alignment="CENTER_LEFT" spacing="12"
+              style="-fx-background-color:white;-fx-padding:16 24;
+                     -fx-border-color:#E0E8F8;-fx-border-width:0 0 1 0;">
+            <Label fx:id="lblMessage" style="-fx-font-size:13px;-fx-font-weight:bold;"
+                   visible="false" managed="false"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="+ New Payment" onAction="#handleClear"
+                    style="-fx-background-color:#2B3990;-fx-text-fill:white;
+                           -fx-background-radius:8;-fx-padding:9 20;-fx-font-size:13px;-fx-cursor:hand;"/>
+        </HBox>
+
+        <HBox spacing="20" style="-fx-padding:0 24 24 24;" VBox.vgrow="ALWAYS">
+
+            <!-- Form -->
+            <VBox spacing="14" prefWidth="300"
+                  style="-fx-background-color:white;-fx-padding:24;-fx-background-radius:12;
+                         -fx-effect:dropshadow(gaussian,#D0D8F0,8,0,0,2);">
+                <Label text="Payment Details"
+                       style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#2B3990;
+                              -fx-padding:0 0 8 0;-fx-border-color:transparent transparent #E0E8F8 transparent;
+                              -fx-border-width:0 0 1 0;"/>
+                <VBox spacing="5">
+                    <Label text="Payment ID" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                    <TextField fx:id="txtId" editable="false"
+                               style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                      -fx-padding:8 12;-fx-font-size:13px;-fx-background-color:#f5f7fa;"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Registration *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                    <ComboBox fx:id="cmbRegistration" promptText="Select registration" maxWidth="Infinity"
+                              style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Payment Date *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                    <DatePicker fx:id="dpPaymentDate" maxWidth="Infinity"
+                                style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Amount (LKR) *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                    <TextField fx:id="txtAmount" promptText="e.g. 80000"
+                               style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                      -fx-padding:8 12;-fx-font-size:13px;"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Status *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                    <ComboBox fx:id="cmbStatus" promptText="Select status" maxWidth="Infinity"
+                              style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
+                </VBox>
+                <HBox spacing="10" style="-fx-padding:8 0 0 0;">
+                    <Button text="Clear" onAction="#handleClear"
+                            style="-fx-background-color:transparent;-fx-border-color:#2B3990;
+                                   -fx-border-radius:6;-fx-background-radius:6;-fx-text-fill:#2B3990;
+                                   -fx-padding:8 20;-fx-cursor:hand;"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button fx:id="btnSave" text="Save" onAction="#handleSave"
+                            style="-fx-background-color:#2B3990;-fx-background-radius:6;
+                                   -fx-text-fill:white;-fx-padding:8 20;-fx-cursor:hand;"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                </HBox>
+            </VBox>
+
+            <!-- Table -->
+            <VBox spacing="12" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color:white;-fx-padding:24;-fx-background-radius:12;
+                         -fx-effect:dropshadow(gaussian,#D0D8F0,8,0,0,2);">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Payment List"
+                           style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#2B3990;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="txtSearch" promptText="🔍  Search..." prefWidth="200"
+                               style="-fx-background-radius:20;-fx-border-radius:20;
+                                      -fx-border-color:#dce3ec;-fx-padding:7 14;-fx-font-size:13px;"/>
+                </HBox>
+                <TableView fx:id="tblPayment" VBox.vgrow="ALWAYS"
+                           style="-fx-background-color:transparent;-fx-border-color:#E0E8F8;-fx-border-radius:8;">
+                    <columns>
+                        <TableColumn fx:id="colId"           text="ID"           prefWidth="90"/>
+                        <TableColumn fx:id="colRegistration" text="Registration"  prefWidth="120"/>
+                        <TableColumn fx:id="colDate"         text="Date"          prefWidth="110"/>
+                        <TableColumn fx:id="colAmount"       text="Amount (LKR)"  prefWidth="120"/>
+                        <TableColumn fx:id="colStatus"       text="Status"        prefWidth="100"/>
+                        <TableColumn fx:id="colAction"       text="Actions"       prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </HBox>
+    </VBox>
+</AnchorPane>

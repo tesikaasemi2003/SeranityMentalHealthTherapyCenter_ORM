@@ -5,6 +5,7 @@ import lk.ijse.seranity_mental_health_therapy_center.dao.DAOFactory;
 import lk.ijse.seranity_mental_health_therapy_center.dao.DAOTypes;
 import lk.ijse.seranity_mental_health_therapy_center.dao.custom.PaymentDAO;
 import lk.ijse.seranity_mental_health_therapy_center.entity.Payment;
+import lk.ijse.seranity_mental_health_therapy_center.bo.exception.PaymentProcessingException;
 
 import java.util.List;
 
@@ -15,6 +16,18 @@ public class PaymentBOImpl implements PaymentBO {
 
     @Override
     public boolean savePayment(Payment payment) throws Exception {
+        // Invalid amount check
+        if (payment.getAmount() <= 0) {
+            throw new PaymentProcessingException(
+                    "Invalid payment amount: " + payment.getAmount() + ". Amount must be greater than 0."
+            );
+        }
+        // Registration not linked
+        if (payment.getRegistration() == null) {
+            throw new PaymentProcessingException(
+                    "Payment must be linked to a valid registration."
+            );
+        }
         return paymentDAO.save(payment);
     }
 

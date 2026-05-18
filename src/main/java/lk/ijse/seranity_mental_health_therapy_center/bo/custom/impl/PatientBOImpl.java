@@ -5,6 +5,7 @@ import lk.ijse.seranity_mental_health_therapy_center.dao.DAOFactory;
 import lk.ijse.seranity_mental_health_therapy_center.dao.DAOTypes;
 import lk.ijse.seranity_mental_health_therapy_center.dao.custom.PatientDAO;
 import lk.ijse.seranity_mental_health_therapy_center.entity.Patient;
+import lk.ijse.seranity_mental_health_therapy_center.bo.exception.DuplicateEntryException;
 
 import java.util.List;
 
@@ -15,6 +16,14 @@ public class PatientBOImpl implements PatientBO {
 
     @Override
     public boolean savePatient(Patient patient) throws Exception {
+        List<Patient> all = patientDAO.getAll();
+        for (Patient p : all) {
+            if (p.getNic().equals(patient.getNic())) {
+                throw new DuplicateEntryException(
+                        "Patient with NIC " + patient.getNic() + " is already registered."
+                );
+            }
+        }
         return patientDAO.save(patient);
     }
 

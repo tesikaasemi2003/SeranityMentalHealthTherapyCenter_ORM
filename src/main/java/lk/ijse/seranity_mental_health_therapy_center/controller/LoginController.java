@@ -12,6 +12,8 @@ import lk.ijse.seranity_mental_health_therapy_center.bo.BOFactory;
 import lk.ijse.seranity_mental_health_therapy_center.bo.BOTypes;
 import lk.ijse.seranity_mental_health_therapy_center.bo.custom.UserBO;
 import lk.ijse.seranity_mental_health_therapy_center.entity.User;
+import lk.ijse.seranity_mental_health_therapy_center.bo.exception.InvalidCredentialsException;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,28 +49,33 @@ public class LoginController implements Initializable {
         try {
             User user = userBO.getUserByUsername(username);
 
-            if (user == null || !user.getPassword().equals(password)) {
-                showError("Invalid username or password.");
-                return;
+            // Invalid credentials — assignment requirement
+            if (user == null) {
+                throw new InvalidCredentialsException("Invalid username or password.");
             }
-
+            if (!BCrypt.checkpw(password, user.getPassword())) {
+                throw new InvalidCredentialsException("Invalid username or password.");
+            }
             if (!user.getRole().equalsIgnoreCase(role)) {
-                showError("Role mismatch. Please select correct role.");
-                return;
+                throw new InvalidCredentialsException(
+                        "Role mismatch. Please select the correct role."
+                );
             }
 
             navigateToDashboard(user);
 
+        } catch (InvalidCredentialsException e) {
+            // Custom exception catch — assignment requirement
+            showError(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             showError("System error. Please try again.");
         }
     }
-
     private void navigateToDashboard(User user) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/lk/ijse/seranity_mental_health_therapy_center/Dashboard.fxml"));
+                    getClass().getResource("/lk/ijse/seranity_mental_health_therapy_center/view/Dashboard.fxml"));
             Scene scene = new Scene(loader.load());
 
             DashboardController dc = loader.getController();
