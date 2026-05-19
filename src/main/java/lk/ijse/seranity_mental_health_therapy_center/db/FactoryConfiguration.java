@@ -13,7 +13,7 @@ public class FactoryConfiguration {
     private FactoryConfiguration() {
         Configuration configuration = new Configuration();
 
-        // Entity classes add කරන්න
+
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Patient.class);
         configuration.addAnnotatedClass(Therapist.class);

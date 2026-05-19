@@ -49,7 +49,7 @@ public class LoginController implements Initializable {
         try {
             User user = userBO.getUserByUsername(username);
 
-            // Invalid credentials — assignment requirement
+            // Invalid credentials
             if (user == null) {
                 throw new InvalidCredentialsException("Invalid username or password.");
             }

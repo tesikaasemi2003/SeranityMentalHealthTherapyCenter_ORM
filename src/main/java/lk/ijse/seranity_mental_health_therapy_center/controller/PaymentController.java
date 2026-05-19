@@ -144,11 +144,12 @@ public class PaymentController implements Initializable {
                     ? paymentBO.updatePayment(payment)
                     : paymentBO.savePayment(payment);
 
-            if (result) {
-                showSuccess(isEditMode ? "Payment updated!" : "Payment saved!");
-                loadTableData();
+            if (paymentBO.savePayment(payment)) {
+                showSuccess("Payment saved!");
                 handleClear();
             }
+        } catch (PaymentProcessingException e) {
+            showError(e.getMessage()); // "Invalid amount" etc
         } catch (Exception e) {
             showError("Error: " + e.getMessage());
             e.printStackTrace();
