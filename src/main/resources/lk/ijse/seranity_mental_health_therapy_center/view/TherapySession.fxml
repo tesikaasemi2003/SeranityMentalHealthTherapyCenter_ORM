@@ -6,88 +6,101 @@
             fx:controller="lk.ijse.seranity_mental_health_therapy_center.controller.TherapySessionController"
             style="-fx-background-color:#F0F4FF;">
 
-    <VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+    <VBox spacing="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
           AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
+        <!-- TOP BAR -->
         <HBox alignment="CENTER_LEFT" spacing="12"
               style="-fx-background-color:white;-fx-padding:16 24;
                      -fx-border-color:#E0E8F8;-fx-border-width:0 0 1 0;">
+            <VBox spacing="2">
+                <Label style="-fx-text-fill:#8899BB;-fx-font-size:11px;" text="Sessions"/>
+                <Label style="-fx-text-fill:#2B3990;-fx-font-size:17px;-fx-font-weight:BOLD;"
+                       text="Therapy Sessions"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="lblMessage" style="-fx-font-size:13px;-fx-font-weight:bold;"
                    visible="false" managed="false"/>
-            <Region HBox.hgrow="ALWAYS"/>
             <Button text="+ New Session" onAction="#handleClear"
                     style="-fx-background-color:#2B3990;-fx-text-fill:white;
                            -fx-background-radius:8;-fx-padding:9 20;-fx-font-size:13px;-fx-cursor:hand;"/>
         </HBox>
 
-        <HBox spacing="20" style="-fx-padding:0 24 24 24;" VBox.vgrow="ALWAYS">
+        <!-- MAIN CONTENT -->
+        <HBox spacing="20" style="-fx-padding:20 24 24 24;" VBox.vgrow="ALWAYS">
 
-            <!-- Form -->
-            <VBox spacing="14" prefWidth="300"
-                  style="-fx-background-color:white;-fx-padding:24;-fx-background-radius:12;
-                         -fx-effect:dropshadow(gaussian,#D0D8F0,8,0,0,2);">
-                <Label text="Session Details"
-                       style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#2B3990;
-                              -fx-padding:0 0 8 0;-fx-border-color:transparent transparent #E0E8F8 transparent;
-                              -fx-border-width:0 0 1 0;"/>
-                <VBox spacing="5">
-                    <Label text="Session ID" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
-                    <TextField fx:id="txtId" editable="false"
-                               style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
-                                      -fx-padding:8 12;-fx-font-size:13px;-fx-background-color:#f5f7fa;"/>
+            <!-- LEFT: Form in ScrollPane -->
+            <ScrollPane hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" fitToWidth="true"
+                        minWidth="280" maxWidth="300"
+                        style="-fx-background-color:transparent;-fx-background:transparent;
+                               -fx-border-color:transparent;">
+                <VBox spacing="14"
+                      style="-fx-background-color:white;-fx-padding:24;-fx-background-radius:12;
+                             -fx-effect:dropshadow(gaussian,#D0D8F0,8,0,0,2);">
+                    <Label text="Session Details"
+                           style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#2B3990;
+                                  -fx-padding:0 0 8 0;-fx-border-color:transparent transparent #E0E8F8 transparent;
+                                  -fx-border-width:0 0 1 0;"/>
+                    <VBox spacing="5">
+                        <Label text="Session ID" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                        <TextField fx:id="txtId" editable="false" maxWidth="Infinity"
+                                   style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                          -fx-padding:8 12;-fx-font-size:13px;-fx-background-color:#f5f7fa;"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="Patient *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                        <ComboBox fx:id="cmbPatient" promptText="Select patient" maxWidth="Infinity"
+                                  style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="Therapist *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                        <ComboBox fx:id="cmbTherapist" promptText="Select therapist" maxWidth="Infinity"
+                                  style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="Session Date *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                        <DatePicker fx:id="dpSessionDate" maxWidth="Infinity"
+                                    style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="Start Time *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                        <TextField fx:id="txtStartTime" promptText="e.g. 09:00" maxWidth="Infinity"
+                                   style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                          -fx-padding:8 12;-fx-font-size:13px;"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="End Time *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                        <TextField fx:id="txtEndTime" promptText="e.g. 10:00" maxWidth="Infinity"
+                                   style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                          -fx-padding:8 12;-fx-font-size:13px;"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="Status" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                        <ComboBox fx:id="cmbStatus" promptText="Select status" maxWidth="Infinity"
+                                  style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="Notes" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
+                        <TextArea fx:id="txtNotes" promptText="Session notes..." prefRowCount="3"
+                                  maxWidth="Infinity"
+                                  style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
+                                         -fx-padding:8 12;-fx-font-size:13px;"/>
+                    </VBox>
+                    <HBox spacing="10" style="-fx-padding:8 0 0 0;">
+                        <Button text="Clear" onAction="#handleClear"
+                                style="-fx-background-color:transparent;-fx-border-color:#2B3990;
+                                       -fx-border-radius:6;-fx-background-radius:6;-fx-text-fill:#2B3990;
+                                       -fx-padding:8 20;-fx-cursor:hand;-fx-font-size:13px;"
+                                HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Button fx:id="btnSave" text="Save" onAction="#handleSave"
+                                style="-fx-background-color:#2B3990;-fx-background-radius:6;
+                                       -fx-text-fill:white;-fx-padding:8 20;-fx-cursor:hand;-fx-font-size:13px;"
+                                HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    </HBox>
                 </VBox>
-                <VBox spacing="5">
-                    <Label text="Patient *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
-                    <ComboBox fx:id="cmbPatient" promptText="Select patient" maxWidth="Infinity"
-                              style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
-                </VBox>
-                <VBox spacing="5">
-                    <Label text="Therapist *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
-                    <ComboBox fx:id="cmbTherapist" promptText="Select therapist" maxWidth="Infinity"
-                              style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
-                </VBox>
-                <VBox spacing="5">
-                    <Label text="Session Date *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
-                    <DatePicker fx:id="dpSessionDate" maxWidth="Infinity"
-                                style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
-                </VBox>
-                <VBox spacing="5">
-                    <Label text="Start Time *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
-                    <TextField fx:id="txtStartTime" promptText="e.g. 09:00"
-                               style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
-                                      -fx-padding:8 12;-fx-font-size:13px;"/>
-                </VBox>
-                <VBox spacing="5">
-                    <Label text="End Time *" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
-                    <TextField fx:id="txtEndTime" promptText="e.g. 10:00"
-                               style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
-                                      -fx-padding:8 12;-fx-font-size:13px;"/>
-                </VBox>
-                <VBox spacing="5">
-                    <Label text="Status" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
-                    <ComboBox fx:id="cmbStatus" promptText="Select status" maxWidth="Infinity"
-                              style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;-fx-font-size:13px;"/>
-                </VBox>
-                <VBox spacing="5">
-                    <Label text="Notes" style="-fx-font-size:12px;-fx-text-fill:#555;-fx-font-weight:bold;"/>
-                    <TextArea fx:id="txtNotes" promptText="Session notes..." prefRowCount="2"
-                              style="-fx-background-radius:6;-fx-border-radius:6;-fx-border-color:#dce3ec;
-                                     -fx-padding:8 12;-fx-font-size:13px;"/>
-                </VBox>
-                <HBox spacing="10" style="-fx-padding:8 0 0 0;">
-                    <Button text="Clear" onAction="#handleClear"
-                            style="-fx-background-color:transparent;-fx-border-color:#2B3990;
-                                   -fx-border-radius:6;-fx-background-radius:6;-fx-text-fill:#2B3990;
-                                   -fx-padding:8 20;-fx-cursor:hand;"
-                            HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                    <Button fx:id="btnSave" text="Save" onAction="#handleSave"
-                            style="-fx-background-color:#2B3990;-fx-background-radius:6;
-                                   -fx-text-fill:white;-fx-padding:8 20;-fx-cursor:hand;"
-                            HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                </HBox>
-            </VBox>
+            </ScrollPane>
 
-            <!-- Table -->
+            <!-- RIGHT: Table -->
             <VBox spacing="12" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"
                   style="-fx-background-color:white;-fx-padding:24;-fx-background-radius:12;
                          -fx-effect:dropshadow(gaussian,#D0D8F0,8,0,0,2);">
@@ -102,17 +115,18 @@
                 <TableView fx:id="tblSession" VBox.vgrow="ALWAYS"
                            style="-fx-background-color:transparent;-fx-border-color:#E0E8F8;-fx-border-radius:8;">
                     <columns>
-                        <TableColumn fx:id="colId"        text="ID"        prefWidth="80"/>
+                        <TableColumn fx:id="colId"        text="ID"        prefWidth="70"/>
                         <TableColumn fx:id="colPatient"   text="Patient"   prefWidth="130"/>
                         <TableColumn fx:id="colTherapist" text="Therapist" prefWidth="130"/>
                         <TableColumn fx:id="colDate"      text="Date"      prefWidth="100"/>
-                        <TableColumn fx:id="colStartTime" text="Start"     prefWidth="80"/>
-                        <TableColumn fx:id="colEndTime"   text="End"       prefWidth="80"/>
+                        <TableColumn fx:id="colStartTime" text="Start"     prefWidth="70"/>
+                        <TableColumn fx:id="colEndTime"   text="End"       prefWidth="70"/>
                         <TableColumn fx:id="colStatus"    text="Status"    prefWidth="100"/>
                         <TableColumn fx:id="colAction"    text="Actions"   prefWidth="120"/>
                     </columns>
                 </TableView>
             </VBox>
+
         </HBox>
     </VBox>
 </AnchorPane>

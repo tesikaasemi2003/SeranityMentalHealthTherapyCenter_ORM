@@ -24,32 +24,32 @@
                 <Label style="-fx-font-size: 9px; -fx-text-fill: #6677BB;" text="Mental Health Therapy Center" />
             </VBox>
 
-               <VBox style="-fx-padding: 16 24 16 24; -fx-background-color: #243082;                          -fx-border-color: #3344AA; -fx-border-width: 0 0 1 0;">
+            <VBox style="-fx-padding: 16 24 16 24; -fx-background-color: #243082;                          -fx-border-color: #3344AA; -fx-border-width: 0 0 1 0;">
                 <Label fx:id="lblUserName" style="-fx-font-size: 13px; -fx-font-weight: BOLD; -fx-text-fill: white;" text="User Name" />
                 <Label fx:id="lblUserRole" style="-fx-font-size: 11px; -fx-text-fill: #3DC4A8;" text="Role" />
             </VBox>
 
-                  <VBox spacing="4" style="-fx-padding: 16 12 16 12;" VBox.vgrow="ALWAYS">
+            <VBox spacing="4" style="-fx-padding: 16 12 16 12;" VBox.vgrow="ALWAYS">
 
-                      <Button fx:id="btnDashboard" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: #3DC4A8; -fx-text-fill: white;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  📊   Dashboard" />
+                <Button fx:id="btnDashboard" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: #3DC4A8; -fx-text-fill: white;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  📊   Dashboard" />
 
-                      <Button fx:id="btnPatients" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  👤   Patients" />
+                <Button fx:id="btnPatients" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  👤   Patients" />
 
-                      <Button fx:id="btnTherapists" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  👨‍⚕️   Therapists" />
+                <Button fx:id="btnTherapists" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  👨‍⚕️   Therapists" />
 
-                      <Button fx:id="btnPrograms" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  📋   Programs" />
+                <Button fx:id="btnPrograms" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  📋   Programs" />
 
-                      <Button fx:id="btnRegistrations" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  📝   Registrations" />
+                <Button fx:id="btnRegistrations" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  📝   Registrations" />
 
-                      <Button fx:id="btnSessions" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  📅   Sessions" />
+                <Button fx:id="btnSessions" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  📅   Sessions" />
 
-                      <Button fx:id="btnPayments" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  💰   Payments" />
+                <Button fx:id="btnPayments" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  💰   Payments" />
 
-                      <Button fx:id="btnUsers" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  👥   Users" />
+                <Button fx:id="btnUsers" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleNavigation" style="-fx-background-color: transparent; -fx-text-fill: #8899CC;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  👥   Users" />
 
-                      <Region VBox.vgrow="ALWAYS" />
+                <Region VBox.vgrow="ALWAYS" />
 
-                      <Button fx:id="btnLogout" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: transparent; -fx-text-fill: #FF6B6B;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  🚪   Logout" />
+                <Button fx:id="btnLogout" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: transparent; -fx-text-fill: #FF6B6B;                                -fx-font-size: 13px; -fx-padding: 12 16 12 16;                                -fx-background-radius: 8; -fx-cursor: hand; -fx-border-width: 0;" text="  🚪   Logout" />
             </VBox>
         </VBox>
     </left>
@@ -59,15 +59,15 @@
 
             <HBox alignment="CENTER_LEFT" prefHeight="104.0" prefWidth="1040.0" spacing="16" style="-fx-background-color: white; -fx-padding: 16 28 16 28;                          -fx-border-color: #E0E8F8; -fx-border-width: 0 0 1 0;">
                 <Label fx:id="lblPageTitle" style="-fx-font-size: 50px; -fx-font-weight: BOLD; -fx-text-fill: #2B3990;" text="Dashboard">
-               <font>
-                  <Font size="36.0" />
-               </font></Label>
+                    <font>
+                        <Font size="36.0" />
+                    </font></Label>
                 <Region HBox.hgrow="ALWAYS" />
-            <ImageView fitHeight="108.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/Seranity_logo.png" />
-               </image>
-            </ImageView>
+                <ImageView fitHeight="108.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/Seranity_logo.png" />
+                    </image>
+                </ImageView>
                 <Label fx:id="lblDateTime" style="-fx-font-size: 12px; -fx-text-fill: #7788AA;" text="" />
             </HBox>
 

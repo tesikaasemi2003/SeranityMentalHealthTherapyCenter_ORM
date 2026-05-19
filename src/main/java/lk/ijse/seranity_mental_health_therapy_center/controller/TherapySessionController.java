@@ -60,6 +60,7 @@ public class TherapySessionController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        tblSession.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         cmbStatus.getItems().addAll("SCHEDULED", "COMPLETED", "CANCELLED");
         setupTable();
         setupSearch();

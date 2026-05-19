@@ -8,305 +8,251 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720" prefWidth="1100"
-            style="-fx-background-color: #F0F4FF;"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="lk.ijse.seranity_mental_health_therapy_center.controller.PatientRegistrationController">
+<VBox spacing="0"
+      style="-fx-background-color: #F0F4FF;"
+      xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="lk.ijse.seranity_mental_health_therapy_center.controller.PatientRegistrationController">
 
-    <!-- LEFT SIDEBAR -->
-    <Rectangle fill="linear-gradient(to bottom, #0d2456 0%, #1a3a8f 60%, #1e4db7 100%)"
-               height="720" layoutX="0" layoutY="0" width="220" />
-
-    <VBox alignment="TOP_CENTER" layoutX="0" layoutY="0"
-          prefHeight="720" prefWidth="220" spacing="0">
-
-        <VBox alignment="CENTER" prefHeight="110" style="-fx-background-color: transparent;">
-            <ImageView fitHeight="70" fitWidth="160" pickOnBounds="true" preserveRatio="true">
-                <image><Image url="@../images/Seranity_logo.png" /></image>
-            </ImageView>
+    <!-- TOP BAR -->
+    <HBox alignment="CENTER_LEFT" spacing="12"
+          style="-fx-background-color: white; -fx-padding: 16 24;
+                 -fx-border-color: #E0E8F8; -fx-border-width: 0 0 1 0;">
+        <VBox spacing="2">
+            <Label style="-fx-text-fill: #8899BB; -fx-font-size: 11px;" text="Patients  ›  Register" />
+            <Label style="-fx-text-fill: #2B3990; -fx-font-size: 17px; -fx-font-weight: BOLD;"
+                   text="New Patient Registration" />
         </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Label fx:id="lblMessage"
+               style="-fx-font-size: 13px; -fx-font-weight: bold;"
+               visible="false" managed="false" />
+        <Button text="+ New Patient" onAction="#handleClear"
+                style="-fx-background-color: #2B3990; -fx-text-fill: white;
+                       -fx-background-radius: 8; -fx-padding: 9 20; -fx-font-size: 13px; -fx-cursor: hand;" />
+    </HBox>
 
-        <Rectangle fill="#2952c4" height="1" opacity="0.5" width="180" />
+    <!-- SCROLL CONTENT -->
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background-color: transparent; -fx-background: transparent;"
+                VBox.vgrow="ALWAYS">
 
-        <Label style="-fx-text-fill: #5577BB; -fx-font-size: 10px; -fx-font-weight: BOLD;"
-               text="NAVIGATION" prefWidth="180">
-            <VBox.margin><Insets top="18" left="20" bottom="6" /></VBox.margin>
-        </Label>
+        <VBox spacing="20" style="-fx-padding: 24;">
 
-        <HBox alignment="CENTER_LEFT" prefHeight="44" prefWidth="220" spacing="12"
-              style="-fx-background-color: transparent; -fx-cursor: hand;">
-            <VBox.margin><Insets left="16" right="16" /></VBox.margin>
-            <Rectangle arcHeight="6" arcWidth="6" fill="#4FC3F7" height="28" width="28" />
-            <Label style="-fx-text-fill: #A8C4FF; -fx-font-size: 13px;" text="Dashboard" />
-        </HBox>
+            <!-- CARD 1: Personal Information -->
+            <VBox spacing="14"
+                  style="-fx-background-color: white; -fx-padding: 24; -fx-background-radius: 12;
+                         -fx-effect: dropshadow(gaussian, #D0D8F0, 8, 0, 0, 2);">
+                <Label text="Personal Information"
+                       style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2B3990;
+                              -fx-padding: 0 0 8 0; -fx-border-color: transparent transparent #E0E8F8 transparent;
+                              -fx-border-width: 0 0 1 0;" />
 
-        <!-- ACTIVE -->
-        <HBox alignment="CENTER_LEFT" prefHeight="44" prefWidth="220" spacing="12"
-              style="-fx-background-color: rgba(74,114,255,0.25); -fx-background-radius: 10; -fx-cursor: hand;">
-            <VBox.margin><Insets left="10" right="10" /></VBox.margin>
-            <Rectangle arcHeight="6" arcWidth="6" fill="#4FC3F7" height="28" width="28" />
-            <Label style="-fx-text-fill: #FFFFFF; -fx-font-size: 13px; -fx-font-weight: BOLD;" text="Patients" />
-        </HBox>
+                <GridPane hgap="16" vgap="14">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints /><RowConstraints /><RowConstraints />
+                    </rowConstraints>
 
-        <HBox alignment="CENTER_LEFT" prefHeight="44" prefWidth="220" spacing="12"
-              style="-fx-background-color: transparent; -fx-cursor: hand;">
-            <VBox.margin><Insets left="16" right="16" /></VBox.margin>
-            <Rectangle arcHeight="6" arcWidth="6" fill="#4FC3F7" height="28" width="28" />
-            <Label style="-fx-text-fill: #A8C4FF; -fx-font-size: 13px;" text="Appointments" />
-        </HBox>
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Full Name *" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <TextField fx:id="txtFullName" prefHeight="38" maxWidth="Infinity"
+                                   promptText="Enter full name"
+                                   style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #dce3ec;
+                                          -fx-padding: 8 12; -fx-font-size: 13px;" />
+                    </VBox>
 
-        <HBox alignment="CENTER_LEFT" prefHeight="44" prefWidth="220" spacing="12"
-              style="-fx-background-color: transparent; -fx-cursor: hand;">
-            <VBox.margin><Insets left="16" right="16" /></VBox.margin>
-            <Rectangle arcHeight="6" arcWidth="6" fill="#4FC3F7" height="28" width="28" />
-            <Label style="-fx-text-fill: #A8C4FF; -fx-font-size: 13px;" text="Therapists" />
-        </HBox>
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="NIC Number *" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <TextField fx:id="txtNIC" prefHeight="38" maxWidth="Infinity"
+                                   promptText="e.g. 200012345678"
+                                   style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #dce3ec;
+                                          -fx-padding: 8 12; -fx-font-size: 13px;" />
+                    </VBox>
 
-        <HBox alignment="CENTER_LEFT" prefHeight="44" prefWidth="220" spacing="12"
-              style="-fx-background-color: transparent; -fx-cursor: hand;">
-            <VBox.margin><Insets left="16" right="16" /></VBox.margin>
-            <Rectangle arcHeight="6" arcWidth="6" fill="#4FC3F7" height="28" width="28" />
-            <Label style="-fx-text-fill: #A8C4FF; -fx-font-size: 13px;" text="Reports" />
-        </HBox>
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="Date of Birth *" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <DatePicker fx:id="dpDOB" maxWidth="Infinity" prefHeight="38"
+                                    style="-fx-background-radius: 6; -fx-border-radius: 6;
+                                           -fx-border-color: #dce3ec; -fx-font-size: 13px;" />
+                    </VBox>
 
-        <VBox prefHeight="200" />
-        <Rectangle fill="#2952c4" height="1" opacity="0.5" width="180" />
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="Gender *" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <ComboBox fx:id="cmbGender" maxWidth="Infinity" prefHeight="38"
+                                  promptText="Select gender"
+                                  style="-fx-background-radius: 6; -fx-border-radius: 6;
+                                         -fx-border-color: #dce3ec; -fx-font-size: 13px;" />
+                    </VBox>
 
-        <HBox alignment="CENTER_LEFT" prefHeight="50" prefWidth="220" spacing="12"
-              style="-fx-cursor: hand;">
-            <VBox.margin><Insets left="16" /></VBox.margin>
-            <Rectangle arcHeight="6" arcWidth="6" fill="#E57373" height="22" width="22" />
-            <Label style="-fx-text-fill: #E57373; -fx-font-size: 13px;" text="Logout" />
-        </HBox>
-    </VBox>
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <Label text="Blood Group" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <ComboBox fx:id="cmbBloodGroup" maxWidth="Infinity" prefHeight="38"
+                                  promptText="Select blood group"
+                                  style="-fx-background-radius: 6; -fx-border-radius: 6;
+                                         -fx-border-color: #dce3ec; -fx-font-size: 13px;" />
+                    </VBox>
 
-    <Rectangle fill="#4FC3F7" height="44" layoutX="0" layoutY="198"
-               width="4" arcHeight="4" arcWidth="4" />
-
-    <!-- MAIN CONTENT -->
-    <VBox layoutX="230" layoutY="0" prefHeight="720" prefWidth="860" spacing="0">
-
-        <!-- TOP BAR -->
-        <HBox alignment="CENTER_LEFT" prefHeight="64" prefWidth="860"
-              style="-fx-background-color: #FFFFFF; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
-            <HBox.margin><Insets left="24" /></HBox.margin>
-            <VBox spacing="2">
-                <Label style="-fx-text-fill: #8899BB; -fx-font-size: 11px;" text="Patients  ›  Register" />
-                <Label style="-fx-text-fill: #0d2456; -fx-font-size: 18px; -fx-font-weight: BOLD;"
-                       text="New Patient Registration" />
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label text="Marital Status" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <ComboBox fx:id="cmbMaritalStatus" maxWidth="Infinity" prefHeight="38"
+                                  promptText="Select status"
+                                  style="-fx-background-radius: 6; -fx-border-radius: 6;
+                                         -fx-border-color: #dce3ec; -fx-font-size: 13px;" />
+                    </VBox>
+                </GridPane>
             </VBox>
-            <HBox prefWidth="1" HBox.hgrow="ALWAYS" />
-            <HBox alignment="CENTER" spacing="10">
-                <HBox.margin><Insets right="24" /></HBox.margin>
-                <Rectangle arcHeight="30" arcWidth="30" fill="#1a3a8f" height="36" width="36" />
-                <VBox spacing="1">
-                    <Label style="-fx-text-fill: #0d2456; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Dr. Admin" />
-                    <Label style="-fx-text-fill: #8899BB; -fx-font-size: 10px;" text="Administrator" />
-                </VBox>
+
+            <!-- CARD 2: Contact Information -->
+            <VBox spacing="14"
+                  style="-fx-background-color: white; -fx-padding: 24; -fx-background-radius: 12;
+                         -fx-effect: dropshadow(gaussian, #D0D8F0, 8, 0, 0, 2);">
+                <Label text="Contact Information"
+                       style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2B3990;
+                              -fx-padding: 0 0 8 0; -fx-border-color: transparent transparent #E0E8F8 transparent;
+                              -fx-border-width: 0 0 1 0;" />
+
+                <GridPane hgap="16" vgap="14">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints /><RowConstraints /><RowConstraints />
+                    </rowConstraints>
+
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Phone Number *" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <TextField fx:id="txtPhone" prefHeight="38" maxWidth="Infinity"
+                                   promptText="e.g. 0711234567"
+                                   style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #dce3ec;
+                                          -fx-padding: 8 12; -fx-font-size: 13px;" />
+                    </VBox>
+
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Email Address" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <TextField fx:id="txtEmail" prefHeight="38" maxWidth="Infinity"
+                                   promptText="example@email.com"
+                                   style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #dce3ec;
+                                          -fx-padding: 8 12; -fx-font-size: 13px;" />
+                    </VBox>
+
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="Emergency Contact Name" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <TextField fx:id="txtEmergencyName" prefHeight="38" maxWidth="Infinity"
+                                   promptText="Guardian / Next of kin"
+                                   style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #dce3ec;
+                                          -fx-padding: 8 12; -fx-font-size: 13px;" />
+                    </VBox>
+
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="Emergency Contact Phone" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <TextField fx:id="txtEmergencyPhone" prefHeight="38" maxWidth="Infinity"
+                                   promptText="e.g. 0777654321"
+                                   style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #dce3ec;
+                                          -fx-padding: 8 12; -fx-font-size: 13px;" />
+                    </VBox>
+
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
+                        <Label text="Address" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <TextField fx:id="txtAddress" prefHeight="38" maxWidth="Infinity"
+                                   promptText="Enter full address"
+                                   style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #dce3ec;
+                                          -fx-padding: 8 12; -fx-font-size: 13px;" />
+                    </VBox>
+                </GridPane>
+            </VBox>
+
+            <!-- CARD 3: Clinical Information -->
+            <VBox spacing="14"
+                  style="-fx-background-color: white; -fx-padding: 24; -fx-background-radius: 12;
+                         -fx-effect: dropshadow(gaussian, #D0D8F0, 8, 0, 0, 2);">
+                <Label text="Clinical Information"
+                       style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2B3990;
+                              -fx-padding: 0 0 8 0; -fx-border-color: transparent transparent #E0E8F8 transparent;
+                              -fx-border-width: 0 0 1 0;" />
+
+                <GridPane hgap="16" vgap="14">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints /><RowConstraints /><RowConstraints />
+                    </rowConstraints>
+
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Assigned Therapist" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <ComboBox fx:id="cmbTherapist" maxWidth="Infinity" prefHeight="38"
+                                  promptText="Select therapist"
+                                  style="-fx-background-radius: 6; -fx-border-radius: 6;
+                                         -fx-border-color: #dce3ec; -fx-font-size: 13px;" />
+                    </VBox>
+
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Therapy Type" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <ComboBox fx:id="cmbTherapyType" maxWidth="Infinity" prefHeight="38"
+                                  promptText="Select therapy"
+                                  style="-fx-background-radius: 6; -fx-border-radius: 6;
+                                         -fx-border-color: #dce3ec; -fx-font-size: 13px;" />
+                    </VBox>
+
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="Registration Date *" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <DatePicker fx:id="dpRegistrationDate" maxWidth="Infinity" prefHeight="38"
+                                    style="-fx-background-radius: 6; -fx-border-radius: 6;
+                                           -fx-border-color: #dce3ec; -fx-font-size: 13px;" />
+                    </VBox>
+
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="Status" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <ComboBox fx:id="cmbStatus" maxWidth="Infinity" prefHeight="38"
+                                  promptText="Active / Inactive"
+                                  style="-fx-background-radius: 6; -fx-border-radius: 6;
+                                         -fx-border-color: #dce3ec; -fx-font-size: 13px;" />
+                    </VBox>
+
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
+                        <Label text="Medical Notes / Remarks" style="-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+                        <TextArea fx:id="txtMedicalNotes" maxWidth="Infinity" prefHeight="80"
+                                  promptText="Enter any notes about the patient's condition or treatment..."
+                                  style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #dce3ec;
+                                         -fx-padding: 8 12; -fx-font-size: 13px;"
+                                  wrapText="true" />
+                    </VBox>
+                </GridPane>
+            </VBox>
+
+            <!-- ACTION BUTTONS -->
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <VBox.margin><Insets bottom="10" /></VBox.margin>
+                <Label fx:id="lblError" alignment="CENTER_LEFT"
+                       style="-fx-text-fill: #E53935; -fx-font-size: 12px;"
+                       text="" HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnClear" onAction="#handleClear"
+                        prefHeight="38" prefWidth="120"
+                        style="-fx-background-color: transparent; -fx-border-color: #2B3990;
+                               -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #2B3990;
+                               -fx-padding: 8 20; -fx-cursor: hand; -fx-font-size: 13px;"
+                        text="Clear" />
+                <Button fx:id="btnSave" onAction="#handleSave"
+                        prefHeight="38" prefWidth="160"
+                        style="-fx-background-color: #2B3990; -fx-background-radius: 6;
+                               -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-size: 13px;"
+                        text="Register Patient" />
             </HBox>
-        </HBox>
 
-        <!-- SCROLL CONTENT -->
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-                    style="-fx-background-color: transparent; -fx-background: transparent;"
-                    prefHeight="656">
-            <VBox prefWidth="840" spacing="20">
-                <VBox.margin><Insets top="24" left="24" right="24" bottom="24" /></VBox.margin>
+        </VBox>
+    </ScrollPane>
 
-                <!-- CARD 1: Personal Information -->
-                <VBox spacing="0"
-                      style="-fx-background-color: #FFFFFF; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 3);">
-                    <HBox alignment="CENTER_LEFT" prefHeight="50"
-                          style="-fx-background-color: #1a3a8f; -fx-background-radius: 14 14 0 0;" spacing="10">
-                        <Rectangle fill="#4FC3F7" height="22" width="4" arcHeight="4" arcWidth="4" />
-                        <Label style="-fx-text-fill: #FFFFFF; -fx-font-size: 14px; -fx-font-weight: BOLD;" text="Personal Information">
-                            <HBox.margin><Insets left="8" /></HBox.margin>
-                        </Label>
-                    </HBox>
-                    <GridPane hgap="18" vgap="14">
-                        <VBox.margin><Insets top="20" left="22" right="22" bottom="20" /></VBox.margin>
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="50" />
-                            <ColumnConstraints percentWidth="50" />
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints /><RowConstraints /><RowConstraints />
-                        </rowConstraints>
-
-                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Full Name *" />
-                            <TextField fx:id="txtFullName" prefHeight="38" maxWidth="Infinity"
-                                       promptText="Enter full name"
-                                       style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="NIC Number *" />
-                            <TextField fx:id="txtNIC" prefHeight="38" maxWidth="Infinity"
-                                       promptText="e.g. 200012345678"
-                                       style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Date of Birth *" />
-                            <DatePicker fx:id="dpDOB" maxWidth="Infinity" prefHeight="38"
-                                        style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Gender *" />
-                            <ComboBox fx:id="cmbGender" maxWidth="Infinity" prefHeight="38"
-                                      promptText="Select gender"
-                                      style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Blood Group" />
-                            <ComboBox fx:id="cmbBloodGroup" maxWidth="Infinity" prefHeight="38"
-                                      promptText="Select blood group"
-                                      style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Marital Status" />
-                            <ComboBox fx:id="cmbMaritalStatus" maxWidth="Infinity" prefHeight="38"
-                                      promptText="Select status"
-                                      style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;" />
-                        </VBox>
-                    </GridPane>
-                </VBox>
-
-                <!-- CARD 2: Contact Information -->
-                <VBox spacing="0"
-                      style="-fx-background-color: #FFFFFF; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 3);">
-                    <HBox alignment="CENTER_LEFT" prefHeight="50"
-                          style="-fx-background-color: #1a3a8f; -fx-background-radius: 14 14 0 0;" spacing="10">
-                        <Rectangle fill="#4FC3F7" height="22" width="4" arcHeight="4" arcWidth="4" />
-                        <Label style="-fx-text-fill: #FFFFFF; -fx-font-size: 14px; -fx-font-weight: BOLD;" text="Contact Information">
-                            <HBox.margin><Insets left="8" /></HBox.margin>
-                        </Label>
-                    </HBox>
-                    <GridPane hgap="18" vgap="14">
-                        <VBox.margin><Insets top="20" left="22" right="22" bottom="20" /></VBox.margin>
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="50" />
-                            <ColumnConstraints percentWidth="50" />
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints /><RowConstraints /><RowConstraints />
-                        </rowConstraints>
-
-                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Phone Number *" />
-                            <TextField fx:id="txtPhone" prefHeight="38" maxWidth="Infinity"
-                                       promptText="e.g. 0711234567"
-                                       style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Email Address" />
-                            <TextField fx:id="txtEmail" prefHeight="38" maxWidth="Infinity"
-                                       promptText="example@email.com"
-                                       style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Emergency Contact Name" />
-                            <TextField fx:id="txtEmergencyName" prefHeight="38" maxWidth="Infinity"
-                                       promptText="Guardian / Next of kin"
-                                       style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Emergency Contact Phone" />
-                            <TextField fx:id="txtEmergencyPhone" prefHeight="38" maxWidth="Infinity"
-                                       promptText="e.g. 0777654321"
-                                       style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Address" />
-                            <TextField fx:id="txtAddress" prefHeight="38" maxWidth="Infinity"
-                                       promptText="Enter full address"
-                                       style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12; -fx-font-size: 13px;" />
-                        </VBox>
-                    </GridPane>
-                </VBox>
-
-                <!-- CARD 3: Clinical Information -->
-                <VBox spacing="0"
-                      style="-fx-background-color: #FFFFFF; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 3);">
-                    <HBox alignment="CENTER_LEFT" prefHeight="50"
-                          style="-fx-background-color: #1a3a8f; -fx-background-radius: 14 14 0 0;" spacing="10">
-                        <Rectangle fill="#4FC3F7" height="22" width="4" arcHeight="4" arcWidth="4" />
-                        <Label style="-fx-text-fill: #FFFFFF; -fx-font-size: 14px; -fx-font-weight: BOLD;" text="Clinical Information">
-                            <HBox.margin><Insets left="8" /></HBox.margin>
-                        </Label>
-                    </HBox>
-                    <GridPane hgap="18" vgap="14">
-                        <VBox.margin><Insets top="20" left="22" right="22" bottom="20" /></VBox.margin>
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="50" />
-                            <ColumnConstraints percentWidth="50" />
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints /><RowConstraints /><RowConstraints />
-                        </rowConstraints>
-
-                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Assigned Therapist" />
-                            <ComboBox fx:id="cmbTherapist" maxWidth="Infinity" prefHeight="38"
-                                      promptText="Select therapist"
-                                      style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Therapy Type" />
-                            <ComboBox fx:id="cmbTherapyType" maxWidth="Infinity" prefHeight="38"
-                                      promptText="Select therapy"
-                                      style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Registration Date *" />
-                            <DatePicker fx:id="dpRegistrationDate" maxWidth="Infinity" prefHeight="38"
-                                        style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Status" />
-                            <ComboBox fx:id="cmbStatus" maxWidth="Infinity" prefHeight="38"
-                                      promptText="Active / Inactive"
-                                      style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;" />
-                        </VBox>
-                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
-                            <Label style="-fx-text-fill: #1a3a8f; -fx-font-size: 12px; -fx-font-weight: BOLD;" text="Medical Notes / Remarks" />
-                            <TextArea fx:id="txtMedicalNotes" maxWidth="Infinity" prefHeight="80"
-                                      promptText="Enter any notes about the patient's condition or treatment..."
-                                      style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12; -fx-font-size: 13px;"
-                                      wrapText="true" />
-                        </VBox>
-                    </GridPane>
-                </VBox>
-
-                <!-- ACTION BUTTONS -->
-                <HBox alignment="CENTER_RIGHT" spacing="14">
-                    <VBox.margin><Insets bottom="10" /></VBox.margin>
-                    <Label fx:id="lblError" alignment="CENTER_LEFT"
-                           style="-fx-text-fill: #E53935; -fx-font-size: 12px;"
-                           text="" HBox.hgrow="ALWAYS" />
-                    <Button fx:id="btnClear" onAction="#handleClear"
-                            prefHeight="42" prefWidth="130"
-                            style="-fx-background-color: #FFFFFF; -fx-border-color: #1a3a8f; -fx-border-radius: 10; -fx-background-radius: 10; -fx-text-fill: #1a3a8f; -fx-font-size: 13px; -fx-font-weight: BOLD; -fx-cursor: hand;"
-                            text="Clear Form" />
-                    <Button fx:id="btnSave" onAction="#handleSave"
-                            prefHeight="42" prefWidth="160"
-                            style="-fx-background-color: #1a3a8f; -fx-background-radius: 10; -fx-text-fill: #FFFFFF; -fx-font-size: 14px; -fx-font-weight: BOLD; -fx-cursor: hand;"
-                            text="Register Patient" />
-                </HBox>
-
-            </VBox>
-        </ScrollPane>
-    </VBox>
-
-</AnchorPane>
+</VBox>
