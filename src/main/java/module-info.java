@@ -14,6 +14,9 @@ module lk.ijse.seranity_mental_health_therapy_center {
     requires net.sf.jasperreports.core;
 
     opens lk.ijse.seranity_mental_health_therapy_center to javafx.fxml;
+
+    opens lk.ijse.seranity_mental_health_therapy_center.dto.tm to javafx.base, javafx.fxml;
+
     opens lk.ijse.seranity_mental_health_therapy_center.entity
             to org.hibernate.orm.core, javafx.base;
     opens lk.ijse.seranity_mental_health_therapy_center.controller

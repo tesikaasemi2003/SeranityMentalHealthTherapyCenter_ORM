@@ -12,27 +12,27 @@ import lk.ijse.seranity_mental_health_therapy_center.bo.BOFactory;
 import lk.ijse.seranity_mental_health_therapy_center.bo.BOTypes;
 import lk.ijse.seranity_mental_health_therapy_center.bo.custom.PaymentBO;
 import lk.ijse.seranity_mental_health_therapy_center.bo.custom.RegistrationBO;
+import lk.ijse.seranity_mental_health_therapy_center.bo.exception.PaymentProcessingException;
 import lk.ijse.seranity_mental_health_therapy_center.entity.Payment;
 import lk.ijse.seranity_mental_health_therapy_center.entity.Registration;
-import lk.ijse.seranity_mental_health_therapy_center.bo.exception.PaymentProcessingException;
+import lk.ijse.seranity_mental_health_therapy_center.util.ValidationUtil;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class PaymentController implements Initializable {
 
-    @FXML private TextField txtId;
+    @FXML private TextField        txtId;
     @FXML private ComboBox<String> cmbRegistration;
-    @FXML private DatePicker dpPaymentDate;
-    @FXML private TextField txtAmount;
+    @FXML private DatePicker       dpPaymentDate;
+    @FXML private TextField        txtAmount;
     @FXML private ComboBox<String> cmbStatus;
-    @FXML private Label lblMessage;
-    @FXML private Button btnSave;
-    @FXML private TextField txtSearch;
+    @FXML private Label            lblMessage;
+    @FXML private Button           btnSave;
+    @FXML private TextField        txtSearch;
 
-    @FXML private TableView<Payment> tblPayment;
+    @FXML private TableView<Payment>              tblPayment;
     @FXML private TableColumn<Payment, String>    colId;
     @FXML private TableColumn<Payment, String>    colRegistration;
     @FXML private TableColumn<Payment, LocalDate> colDate;
@@ -92,10 +92,12 @@ public class PaymentController implements Initializable {
         colAction.setCellFactory(col -> new TableCell<>() {
             private final Button btnEdit   = new Button("Edit");
             private final Button btnDelete = new Button("Delete");
-            private final HBox box = new HBox(6, btnEdit, btnDelete);
+            private final HBox   box       = new HBox(6, btnEdit, btnDelete);
             {
-                btnEdit.setStyle("-fx-background-color:#2B3990;-fx-text-fill:white;-fx-background-radius:5;-fx-padding:4 10;-fx-cursor:hand;-fx-font-size:11px;");
-                btnDelete.setStyle("-fx-background-color:#e74c3c;-fx-text-fill:white;-fx-background-radius:5;-fx-padding:4 10;-fx-cursor:hand;-fx-font-size:11px;");
+                btnEdit.setStyle("-fx-background-color:#2B3990;-fx-text-fill:white;" +
+                        "-fx-background-radius:5;-fx-padding:4 10;-fx-cursor:hand;-fx-font-size:11px;");
+                btnDelete.setStyle("-fx-background-color:#e74c3c;-fx-text-fill:white;" +
+                        "-fx-background-radius:5;-fx-padding:4 10;-fx-cursor:hand;-fx-font-size:11px;");
                 btnEdit.setOnAction(e   -> populateForm(getTableView().getItems().get(getIndex())));
                 btnDelete.setOnAction(e -> handleDelete(getTableView().getItems().get(getIndex())));
             }
@@ -111,9 +113,10 @@ public class PaymentController implements Initializable {
         txtSearch.textProperty().addListener((obs, o, val) -> filtered.setPredicate(row -> {
             if (val == null || val.isEmpty()) return true;
             String lower = val.toLowerCase();
-            boolean matchId = row.getId().toLowerCase().contains(lower);
+            boolean matchId     = row.getId().toLowerCase().contains(lower);
             boolean matchStatus = row.getStatus() != null && row.getStatus().toLowerCase().contains(lower);
-            boolean matchReg = row.getRegistration() != null && row.getRegistration().getId().toLowerCase().contains(lower);
+            boolean matchReg    = row.getRegistration() != null &&
+                    row.getRegistration().getId().toLowerCase().contains(lower);
             return matchId || matchStatus || matchReg;
         }));
         tblPayment.setItems(filtered);
@@ -144,12 +147,13 @@ public class PaymentController implements Initializable {
                     ? paymentBO.updatePayment(payment)
                     : paymentBO.savePayment(payment);
 
-            if (paymentBO.savePayment(payment)) {
-                showSuccess("Payment saved!");
+            if (result) {
+                showSuccess(isEditMode ? "Payment updated!" : "Payment saved!");
+                loadTableData();
                 handleClear();
             }
         } catch (PaymentProcessingException e) {
-            showError(e.getMessage()); // "Invalid amount" etc
+            showError(e.getMessage());
         } catch (Exception e) {
             showError("Error: " + e.getMessage());
             e.printStackTrace();
@@ -193,17 +197,56 @@ public class PaymentController implements Initializable {
         dpPaymentDate.setValue(LocalDate.now());
         txtAmount.clear(); cmbStatus.setValue(null);
         btnSave.setText("Save");
+        clearFieldStyles();
         generateNextId(); hideMessage();
     }
 
+    // ── Validation ────────────────────────────────────────────────────────────
+
     private boolean validateInputs() {
-        if (cmbRegistration.getValue() == null) { showError("Please select a Registration."); return false; }
-        if (dpPaymentDate.getValue() == null) { showError("Payment Date is required."); return false; }
-        if (!txtAmount.getText().trim().matches("^[0-9]+(\\.[0-9]{1,2})?$")) {
-            showError("Amount must be a valid number."); txtAmount.requestFocus(); return false;
+        clearFieldStyles();
+
+        // Registration
+        if (cmbRegistration.getValue() == null) {
+            showError(ValidationUtil.requiredError("Registration")); return false;
         }
-        if (cmbStatus.getValue() == null) { showError("Please select a Status."); return false; }
+
+        // Payment Date
+        if (dpPaymentDate.getValue() == null) {
+            showError(ValidationUtil.requiredError("Payment Date")); return false;
+        }
+        if (dpPaymentDate.getValue().isAfter(LocalDate.now())) {
+            showError("⚠ Payment date cannot be a future date."); return false;
+        }
+
+        // Amount
+        if (!ValidationUtil.isValidAmount(txtAmount.getText())) {
+            showError(ValidationUtil.amountError());
+            highlight(txtAmount); txtAmount.requestFocus(); return false;
+        }
+        // Amount > 0 check
+        double amount = Double.parseDouble(txtAmount.getText().trim());
+        if (amount <= 0) {
+            showError("⚠ Amount must be greater than zero.");
+            highlight(txtAmount); txtAmount.requestFocus(); return false;
+        }
+
+        // Status
+        if (cmbStatus.getValue() == null) {
+            showError(ValidationUtil.requiredError("Payment Status")); return false;
+        }
+
         return true;
+    }
+
+    // ── UI Helpers ────────────────────────────────────────────────────────────
+
+    private void highlight(TextField field) {
+        field.setStyle("-fx-border-color: #e74c3c; -fx-border-radius: 4;");
+    }
+
+    private void clearFieldStyles() {
+        txtAmount.setStyle("");
     }
 
     private void showError(String msg) {
@@ -216,5 +259,7 @@ public class PaymentController implements Initializable {
         lblMessage.setStyle("-fx-text-fill:#27ae60;-fx-font-size:13px;-fx-font-weight:bold;");
         lblMessage.setVisible(true); lblMessage.setManaged(true);
     }
-    private void hideMessage() { lblMessage.setVisible(false); lblMessage.setManaged(false); }
+    private void hideMessage() {
+        lblMessage.setVisible(false); lblMessage.setManaged(false);
+    }
 }

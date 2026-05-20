@@ -13,6 +13,7 @@ import lk.ijse.seranity_mental_health_therapy_center.bo.BOTypes;
 import lk.ijse.seranity_mental_health_therapy_center.bo.custom.TherapistBO;
 import lk.ijse.seranity_mental_health_therapy_center.dto.tm.TherapistTM;
 import lk.ijse.seranity_mental_health_therapy_center.entity.Therapist;
+import lk.ijse.seranity_mental_health_therapy_center.util.ValidationUtil;
 
 import java.net.URL;
 import java.util.List;
@@ -40,10 +41,6 @@ public class TherapistController implements Initializable {
 
     private final TherapistBO therapistBO =
             (TherapistBO) BOFactory.getInstance().getBO(BOTypes.THERAPIST);
-
-    private static final String EMAIL_REGEX = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
-    private static final String PHONE_REGEX = "^(\\+94|0)[0-9]{9}$";
-    private static final String NAME_REGEX  = "^[A-Za-z .]{3,100}$";
 
     private final ObservableList<TherapistTM> masterList = FXCollections.observableArrayList();
     private boolean isEditMode = false;
@@ -129,7 +126,6 @@ public class TherapistController implements Initializable {
             }
         } catch (Exception e) {
             showError("Failed to load: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -145,12 +141,9 @@ public class TherapistController implements Initializable {
             therapist.setPhone(txtPhone.getText().trim());
             therapist.setSpecialization(cmbSpecialization.getValue());
 
-            boolean result;
-            if (!isEditMode) {
-                result = therapistBO.saveTherapist(therapist);
-            } else {
-                result = therapistBO.updateTherapist(therapist);
-            }
+            boolean result = isEditMode
+                    ? therapistBO.updateTherapist(therapist)
+                    : therapistBO.saveTherapist(therapist);
 
             if (result) {
                 showSuccess(isEditMode ? "Therapist updated!" : "Therapist saved!");
@@ -159,7 +152,6 @@ public class TherapistController implements Initializable {
             }
         } catch (Exception e) {
             showError("Error: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -188,7 +180,6 @@ public class TherapistController implements Initializable {
                     }
                 } catch (Exception e) {
                     showError("Delete failed: " + e.getMessage());
-                    e.printStackTrace();
                 }
             }
         });
@@ -201,27 +192,50 @@ public class TherapistController implements Initializable {
         cmbSpecialization.setValue(null);
         cmbAvailability.setValue(null);
         btnSave.setText("Save");
+        clearFieldStyles();
         generateNextId();
         hideMessage();
     }
 
+    // ── Validation ────────────────────────────────────────────────────────────
+
     private boolean validateInputs() {
-        if (!txtName.getText().trim().matches(NAME_REGEX)) {
-            showError("Valid Name required (letters only, min 3 chars).");
-            txtName.requestFocus(); return false;
+        clearFieldStyles();
+
+        // Name
+        if (!ValidationUtil.isValidName(txtName.getText())) {
+            showError(ValidationUtil.nameError());
+            highlight(txtName); txtName.requestFocus(); return false;
         }
+
+        // Specialization
         if (cmbSpecialization.getValue() == null) {
-            showError("Please select a Specialization."); return false;
+            showError(ValidationUtil.requiredError("Specialization")); return false;
         }
-        if (!txtPhone.getText().trim().matches(PHONE_REGEX)) {
-            showError("Invalid Phone (e.g. 0771234567).");
-            txtPhone.requestFocus(); return false;
+
+        // Phone
+        if (!ValidationUtil.isValidPhone(txtPhone.getText())) {
+            showError(ValidationUtil.phoneError());
+            highlight(txtPhone); txtPhone.requestFocus(); return false;
         }
-        if (!txtEmail.getText().trim().matches(EMAIL_REGEX)) {
-            showError("Invalid Email format.");
-            txtEmail.requestFocus(); return false;
+
+        // Email
+        if (!ValidationUtil.isValidEmail(txtEmail.getText())) {
+            showError(ValidationUtil.emailError());
+            highlight(txtEmail); txtEmail.requestFocus(); return false;
         }
+
         return true;
+    }
+
+    // ── UI Helpers ────────────────────────────────────────────────────────────
+
+    private void highlight(TextField field) {
+        field.setStyle("-fx-border-color: #e74c3c; -fx-border-radius: 4;");
+    }
+
+    private void clearFieldStyles() {
+        txtName.setStyle(""); txtPhone.setStyle(""); txtEmail.setStyle("");
     }
 
     private void showError(String msg) {

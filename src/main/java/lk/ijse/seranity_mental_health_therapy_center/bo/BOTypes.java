@@ -7,5 +7,6 @@ public enum BOTypes {
     REGISTRATION,
     THERAPY_SESSION,
     PAYMENT,
-    USER
+    USER,
+    QUERY
 }

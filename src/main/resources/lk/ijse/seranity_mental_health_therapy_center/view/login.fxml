@@ -11,21 +11,31 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="620" prefWidth="900" style="-fx-background-color: #F0F4FF;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.seranity_mental_health_therapy_center.controller.LoginController">
+<AnchorPane prefHeight="620" prefWidth="900"
+            style="-fx-background-color: #F0F4FF;"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lk.ijse.seranity_mental_health_therapy_center.controller.LoginController">
 
     <!-- LEFT PANEL -->
-    <Rectangle fill="linear-gradient(to bottom, #0d2456 0%, #1a3a8f 50%, #1e4db7 100%)" height="632.0" layoutX="-20" layoutY="-10" width="470" />
+    <Rectangle fill="linear-gradient(to bottom, #0d2456 0%, #1a3a8f 50%, #1e4db7 100%)"
+               height="632.0" layoutX="-20" layoutY="-10" width="470" />
 
-    <!-- Decorative circles -->
-    <Rectangle arcHeight="220" arcWidth="220" fill="#2952c4" height="200" layoutX="-53" opacity="0.4" width="210" />
-    <Rectangle arcHeight="160" arcWidth="160" fill="#1230a0" height="160" layoutX="300" layoutY="460" opacity="0.35" width="160" />
-    <Rectangle arcHeight="80" arcWidth="80" fill="#3a6bdf" height="80" layoutX="20" layoutY="400" opacity="0.3" width="80" />
+    <!-- Decorative shapes -->
+    <Rectangle arcHeight="220" arcWidth="220" fill="#2952c4"
+               height="200" layoutX="-53" opacity="0.4" width="210" />
+    <Rectangle arcHeight="160" arcWidth="160" fill="#1230a0"
+               height="160" layoutX="300" layoutY="460" opacity="0.35" width="160" />
+    <Rectangle arcHeight="80" arcWidth="80" fill="#3a6bdf"
+               height="80" layoutX="20" layoutY="400" opacity="0.3" width="80" />
 
     <!-- Main image -->
-    <ImageView fitHeight="320" fitWidth="560" layoutX="-50" layoutY="150" pickOnBounds="true" preserveRatio="true">
+    <ImageView fitHeight="320" fitWidth="560" layoutX="-50" layoutY="150"
+               pickOnBounds="true" preserveRatio="true">
         <image><Image url="@../images/medical_care.png" /></image>
     </ImageView>
 
@@ -45,25 +55,27 @@
         </VBox>
     </HBox>
 
-    <!-- Healing text -->
-    <Label alignment="CENTER" layoutX="0" layoutY="552" prefWidth="450" style="-fx-text-fill: #7AADFF; -fx-font-size: 13px; -fx-font-style: italic;" text="Healing minds, changing lives." />
+    <Label alignment="CENTER" layoutX="0" layoutY="552" prefWidth="450"
+           style="-fx-text-fill: #7AADFF; -fx-font-size: 13px; -fx-font-style: italic;"
+           text="Healing minds, changing lives." />
+    <Label alignment="CENTER" layoutX="0" layoutY="584" prefWidth="450"
+           style="-fx-text-fill: #5577BB; -fx-font-size: 9px;"
+           text="© 2025 Seranity Mental Health Therapy Center" />
 
-    <!-- Copyright -->
-    <Label alignment="CENTER" layoutX="0" layoutY="584" prefWidth="450" style="-fx-text-fill: #5577BB; -fx-font-size: 9px;" text="© 2025 Seranity Mental Health Therapy Center" />
-
-    <!-- Heading labels -->
-    <Label layoutX="20" layoutY="28" prefHeight="50" prefWidth="300" text="Healing minds," textFill="WHITE">
+    <Label layoutX="20" layoutY="28" prefHeight="50" prefWidth="300"
+           text="Healing minds," textFill="WHITE">
         <font><Font name="System Bold" size="30.0" /></font>
     </Label>
-    <Label layoutX="105" layoutY="68" prefHeight="50" prefWidth="300" text="changing lives." textFill="WHITE">
+    <Label layoutX="105" layoutY="68" prefHeight="50" prefWidth="300"
+           text="changing lives." textFill="WHITE">
         <font><Font name="System Bold" size="30.0" /></font>
     </Label>
 
     <!-- RIGHT PANEL -->
     <Rectangle fill="#FFFFFF" height="620" layoutX="450" layoutY="-1" width="450" />
 
-    <!-- RIGHT PANEL VBox -->
-    <VBox alignment="CENTER" layoutX="496" layoutY="10" prefHeight="600" prefWidth="384" spacing="0">
+    <VBox alignment="CENTER" layoutX="496" layoutY="10"
+          prefHeight="600" prefWidth="384" spacing="0">
 
         <!-- Logo -->
         <ImageView fitHeight="160" fitWidth="280" pickOnBounds="true" preserveRatio="true">
@@ -71,51 +83,94 @@
             <VBox.margin><Insets bottom="10" /></VBox.margin>
         </ImageView>
 
-        <!-- Welcome back -->
-        <Label alignment="CENTER" maxWidth="Infinity" style="-fx-text-fill: #1a3a8f; -fx-font-size: 28px; -fx-font-weight: BOLD;" text="Welcome back">
+        <!-- Welcome -->
+        <Label alignment="CENTER" maxWidth="Infinity"
+               style="-fx-text-fill: #1a3a8f; -fx-font-size: 28px; -fx-font-weight: BOLD;"
+               text="Welcome back">
             <VBox.margin><Insets bottom="6" /></VBox.margin>
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
+            <font><Font name="System Bold" size="18.0" /></font>
         </Label>
-
-        <!-- Subtitle -->
-        <Label alignment="CENTER" maxWidth="Infinity" style="-fx-text-fill: #8899BB; -fx-font-size: 13px;" text="Sign in to your account to continue">
+        <Label alignment="CENTER" maxWidth="Infinity"
+               style="-fx-text-fill: #8899BB; -fx-font-size: 13px;"
+               text="Sign in to your account to continue">
             <VBox.margin><Insets bottom="22" /></VBox.margin>
         </Label>
 
         <!-- Username -->
-        <Label maxWidth="Infinity" style="-fx-text-fill: #1a3a8f; -fx-font-size: 13px; -fx-font-weight: BOLD;" text="Username">
+        <Label maxWidth="Infinity"
+               style="-fx-text-fill: #1a3a8f; -fx-font-size: 13px; -fx-font-weight: BOLD;"
+               text="Username">
             <VBox.margin><Insets bottom="5" /></VBox.margin>
         </Label>
-        <TextField fx:id="txtUsername" maxWidth="Infinity" prefHeight="40" promptText="Enter your username" style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 13px;">
+        <TextField fx:id="txtUsername" maxWidth="Infinity" prefHeight="40"
+                   promptText="Enter your username"
+                   style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF;
+                          -fx-border-radius: 8; -fx-background-radius: 8;
+                          -fx-padding: 10 14; -fx-font-size: 13px;">
             <VBox.margin><Insets bottom="14" /></VBox.margin>
         </TextField>
 
-        <!-- Password -->
-        <Label maxWidth="Infinity" style="-fx-text-fill: #1a3a8f; -fx-font-size: 13px; -fx-font-weight: BOLD;" text="Password">
+        <!-- Password with show/hide toggle -->
+        <Label maxWidth="Infinity"
+               style="-fx-text-fill: #1a3a8f; -fx-font-size: 13px; -fx-font-weight: BOLD;"
+               text="Password">
             <VBox.margin><Insets bottom="5" /></VBox.margin>
         </Label>
-        <PasswordField fx:id="txtPassword" maxWidth="Infinity" prefHeight="40" promptText="Enter your password" style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 13px;">
+
+        <!-- Password HBox — PasswordField + visible TextField + toggle button -->
+        <HBox spacing="6" maxWidth="Infinity" alignment="CENTER_LEFT">
             <VBox.margin><Insets bottom="14" /></VBox.margin>
-        </PasswordField>
+
+            <!-- Hidden password field (default) -->
+            <PasswordField fx:id="txtPassword"
+                           prefHeight="40" promptText="Enter your password"
+                           HBox.hgrow="ALWAYS"
+                           style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF;
+                                  -fx-border-radius: 8; -fx-background-radius: 8;
+                                  -fx-padding: 10 14; -fx-font-size: 13px;" />
+
+            <!-- Visible password field (shown when toggled) -->
+            <TextField fx:id="txtPasswordVisible"
+                       prefHeight="40" promptText="Enter your password"
+                       HBox.hgrow="ALWAYS" visible="false" managed="false"
+                       style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF;
+                              -fx-border-radius: 8; -fx-background-radius: 8;
+                              -fx-padding: 10 14; -fx-font-size: 13px;" />
+
+            <!-- Toggle button -->
+            <Button fx:id="btnShowPass" text="👁"
+                    onAction="#handleTogglePassword"
+                    prefHeight="40" prefWidth="42"
+                    style="-fx-background-color: #E8EEF8; -fx-background-radius: 8;
+                           -fx-border-color: #D0DEFF; -fx-border-radius: 8;
+                           -fx-font-size: 16px; -fx-cursor: hand;" />
+        </HBox>
 
         <!-- Login as -->
-        <Label maxWidth="Infinity" style="-fx-text-fill: #1a3a8f; -fx-font-size: 13px; -fx-font-weight: BOLD;" text="Login as">
+        <Label maxWidth="Infinity"
+               style="-fx-text-fill: #1a3a8f; -fx-font-size: 13px; -fx-font-weight: BOLD;"
+               text="Login as">
             <VBox.margin><Insets bottom="5" /></VBox.margin>
         </Label>
-        <ComboBox fx:id="cmbRole" maxWidth="Infinity" promptText="Select role" style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;">
+        <ComboBox fx:id="cmbRole" maxWidth="Infinity" promptText="Select role"
+                  style="-fx-background-color: #F5F8FF; -fx-border-color: #D0DEFF;
+                         -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;">
             <VBox.margin><Insets bottom="8" /></VBox.margin>
         </ComboBox>
 
         <!-- Error label -->
-        <Label fx:id="lblError" alignment="CENTER" maxWidth="Infinity" style="-fx-text-fill: #E53935; -fx-font-size: 12px;" text="">
+        <Label fx:id="lblError" alignment="CENTER" maxWidth="Infinity"
+               style="-fx-text-fill: #E53935; -fx-font-size: 12px;" text="">
             <VBox.margin><Insets bottom="10" /></VBox.margin>
         </Label>
 
         <!-- Sign In button -->
-        <Button fx:id="btnLogin" maxWidth="Infinity" onAction="#handleLogin" prefHeight="42" prefWidth="398" style="-fx-background-color: #1a3a8f; -fx-text-fill: #FFFFFF; -fx-font-size: 15px; -fx-font-weight: BOLD; -fx-background-radius: 10; -fx-padding: 12 0; -fx-cursor: hand;" text="Sign In" />
+        <Button fx:id="btnLogin" maxWidth="Infinity" onAction="#handleLogin"
+                prefHeight="42" prefWidth="398"
+                style="-fx-background-color: #1a3a8f; -fx-text-fill: #FFFFFF;
+                       -fx-font-size: 15px; -fx-font-weight: BOLD;
+                       -fx-background-radius: 10; -fx-padding: 12 0; -fx-cursor: hand;"
+                text="Sign In" />
 
     </VBox>
-
 </AnchorPane>

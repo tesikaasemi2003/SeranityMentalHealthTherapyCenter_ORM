@@ -21,9 +21,7 @@
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="lblMessage" style="-fx-font-size:13px;-fx-font-weight:bold;"
                    visible="false" managed="false"/>
-            <Button text="+ New Session" onAction="#handleClear"
-                    style="-fx-background-color:#2B3990;-fx-text-fill:white;
-                           -fx-background-radius:8;-fx-padding:9 20;-fx-font-size:13px;-fx-cursor:hand;"/>
+
         </HBox>
 
         <!-- MAIN CONTENT -->

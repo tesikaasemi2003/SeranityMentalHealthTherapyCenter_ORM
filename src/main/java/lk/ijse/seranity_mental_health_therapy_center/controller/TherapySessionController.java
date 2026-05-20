@@ -16,6 +16,7 @@ import lk.ijse.seranity_mental_health_therapy_center.bo.custom.TherapySessionBO;
 import lk.ijse.seranity_mental_health_therapy_center.entity.Patient;
 import lk.ijse.seranity_mental_health_therapy_center.entity.Therapist;
 import lk.ijse.seranity_mental_health_therapy_center.entity.TherapySession;
+import lk.ijse.seranity_mental_health_therapy_center.util.ValidationUtil;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -55,8 +56,6 @@ public class TherapySessionController implements Initializable {
 
     private final ObservableList<TherapySession> masterList = FXCollections.observableArrayList();
     private boolean isEditMode = false;
-
-    private static final String TIME_REGEX = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -224,22 +223,64 @@ public class TherapySessionController implements Initializable {
         txtStartTime.clear(); txtEndTime.clear();
         cmbStatus.setValue(null); txtNotes.clear();
         btnSave.setText("Save");
+        clearFieldStyles();
         generateNextId(); hideMessage();
     }
 
+    // ── Validation ────────────────────────────────────────────────────────────
+
     private boolean validateInputs() {
-        if (cmbPatient.getValue() == null)   { showError("Please select a Patient."); return false; }
-        if (cmbTherapist.getValue() == null) { showError("Please select a Therapist."); return false; }
-        if (dpSessionDate.getValue() == null){ showError("Session Date is required."); return false; }
-        if (!txtStartTime.getText().trim().matches(TIME_REGEX)) {
-            showError("Invalid Start Time. Use HH:mm (e.g. 09:00).");
-            txtStartTime.requestFocus(); return false;
+        clearFieldStyles();
+
+        // Patient
+        if (cmbPatient.getValue() == null) {
+            showError(ValidationUtil.requiredError("Patient")); return false;
         }
-        if (!txtEndTime.getText().trim().matches(TIME_REGEX)) {
-            showError("Invalid End Time. Use HH:mm (e.g. 10:00).");
-            txtEndTime.requestFocus(); return false;
+
+        // Therapist
+        if (cmbTherapist.getValue() == null) {
+            showError(ValidationUtil.requiredError("Therapist")); return false;
         }
+
+        // Session Date
+        if (dpSessionDate.getValue() == null) {
+            showError(ValidationUtil.requiredError("Session Date")); return false;
+        }
+
+        // Start Time
+        if (!ValidationUtil.isValidTime(txtStartTime.getText())) {
+            showError(ValidationUtil.timeError());
+            highlight(txtStartTime); txtStartTime.requestFocus(); return false;
+        }
+
+        // End Time
+        if (!ValidationUtil.isValidTime(txtEndTime.getText())) {
+            showError(ValidationUtil.timeError());
+            highlight(txtEndTime); txtEndTime.requestFocus(); return false;
+        }
+
+        // End time must be after start time
+        if (!ValidationUtil.isEndTimeAfterStartTime(txtStartTime.getText(), txtEndTime.getText())) {
+            showError(ValidationUtil.endTimeError());
+            highlight(txtEndTime); txtEndTime.requestFocus(); return false;
+        }
+
+        // Notes length
+        if (!ValidationUtil.isWithinLimit(txtNotes.getText(), 1000)) {
+            showError("⚠ Notes cannot exceed 1000 characters."); return false;
+        }
+
         return true;
+    }
+
+    // ── UI Helpers ────────────────────────────────────────────────────────────
+
+    private void highlight(TextField field) {
+        field.setStyle("-fx-border-color: #e74c3c; -fx-border-radius: 4;");
+    }
+
+    private void clearFieldStyles() {
+        txtStartTime.setStyle(""); txtEndTime.setStyle("");
     }
 
     private void showError(String msg) {

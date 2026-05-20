@@ -15,6 +15,7 @@ import lk.ijse.seranity_mental_health_therapy_center.bo.custom.TherapyProgramBO;
 import lk.ijse.seranity_mental_health_therapy_center.dto.tm.TherapyProgramTM;
 import lk.ijse.seranity_mental_health_therapy_center.entity.Therapist;
 import lk.ijse.seranity_mental_health_therapy_center.entity.TherapyProgram;
+import lk.ijse.seranity_mental_health_therapy_center.util.ValidationUtil;
 
 import java.net.URL;
 import java.util.List;
@@ -32,21 +33,18 @@ public class TherapyProgramController implements Initializable {
     @FXML private Button        btnSave;
     @FXML private TextField     txtSearch;
 
-    @FXML private TableView<TherapyProgramTM>           tblProgram;
-    @FXML private TableColumn<TherapyProgramTM, String> colId;
-    @FXML private TableColumn<TherapyProgramTM, String> colName;
+    @FXML private TableView<TherapyProgramTM>            tblProgram;
+    @FXML private TableColumn<TherapyProgramTM, String>  colId;
+    @FXML private TableColumn<TherapyProgramTM, String>  colName;
     @FXML private TableColumn<TherapyProgramTM, Integer> colDuration;
-    @FXML private TableColumn<TherapyProgramTM, Double> colFee;
-    @FXML private TableColumn<TherapyProgramTM, String> colTherapist;
-    @FXML private TableColumn<TherapyProgramTM, Void>   colAction;
+    @FXML private TableColumn<TherapyProgramTM, Double>  colFee;
+    @FXML private TableColumn<TherapyProgramTM, String>  colTherapist;
+    @FXML private TableColumn<TherapyProgramTM, Void>    colAction;
 
     private final TherapyProgramBO programBO =
             (TherapyProgramBO) BOFactory.getInstance().getBO(BOTypes.THERAPY_PROGRAM);
     private final TherapistBO therapistBO =
             (TherapistBO) BOFactory.getInstance().getBO(BOTypes.THERAPIST);
-
-    private static final String FEE_REGEX      = "^[0-9]+(\\.[0-9]{1,2})?$";
-    private static final String DURATION_REGEX = "^[0-9]{1,3}$";
 
     private final ObservableList<TherapyProgramTM> masterList = FXCollections.observableArrayList();
     private boolean isEditMode = false;
@@ -131,7 +129,6 @@ public class TherapyProgramController implements Initializable {
             }
         } catch (Exception e) {
             showError("Failed to load: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -147,19 +144,15 @@ public class TherapyProgramController implements Initializable {
             program.setDurationWeeks(Integer.parseInt(txtDurationWeeks.getText().trim()));
             program.setFee(Double.parseDouble(txtFee.getText().trim()));
 
-            // Therapist set කරන්න
             if (cmbTherapist.getValue() != null) {
                 String therapistId = cmbTherapist.getValue().split(" - ")[0];
                 Therapist t = therapistBO.searchTherapist(therapistId);
                 program.setTherapist(t);
             }
 
-            boolean result;
-            if (!isEditMode) {
-                result = programBO.saveTherapyProgram(program);
-            } else {
-                result = programBO.updateTherapyProgram(program);
-            }
+            boolean result = isEditMode
+                    ? programBO.updateTherapyProgram(program)
+                    : programBO.saveTherapyProgram(program);
 
             if (result) {
                 showSuccess(isEditMode ? "Program updated!" : "Program saved!");
@@ -168,7 +161,6 @@ public class TherapyProgramController implements Initializable {
             }
         } catch (Exception e) {
             showError("Error: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -180,7 +172,6 @@ public class TherapyProgramController implements Initializable {
         txtDescription.setText(row.getDescription());
         txtDurationWeeks.setText(String.valueOf(row.getDurationWeeks()));
         txtFee.setText(String.valueOf(row.getFee()));
-        // Therapist combo set
         cmbTherapist.getItems().stream()
                 .filter(s -> s.startsWith(row.getTherapistId()))
                 .findFirst()
@@ -203,7 +194,6 @@ public class TherapyProgramController implements Initializable {
                     }
                 } catch (Exception e) {
                     showError("Delete failed: " + e.getMessage());
-                    e.printStackTrace();
                 }
             }
         });
@@ -217,21 +207,59 @@ public class TherapyProgramController implements Initializable {
         txtDurationWeeks.clear(); txtFee.clear();
         cmbTherapist.setValue(null);
         btnSave.setText("Save");
+        clearFieldStyles();
         generateNextId();
         hideMessage();
     }
 
+    // ── Validation ────────────────────────────────────────────────────────────
+
     private boolean validateInputs() {
-        if (txtName.getText().trim().isEmpty()) {
-            showError("Program Name is required."); txtName.requestFocus(); return false;
+        clearFieldStyles();
+
+        // Program Name
+        if (!ValidationUtil.isNotEmpty(txtName.getText())) {
+            showError(ValidationUtil.requiredError("Program Name"));
+            highlight(txtName); txtName.requestFocus(); return false;
         }
-        if (!txtDurationWeeks.getText().trim().matches(DURATION_REGEX)) {
-            showError("Duration must be a number (weeks)."); txtDurationWeeks.requestFocus(); return false;
+        if (!ValidationUtil.isWithinLimit(txtName.getText(), 100)) {
+            showError("⚠ Program Name cannot exceed 100 characters.");
+            highlight(txtName); return false;
         }
-        if (!txtFee.getText().trim().matches(FEE_REGEX)) {
-            showError("Fee must be a valid number (e.g. 80000)."); txtFee.requestFocus(); return false;
+
+        // Duration
+        if (!ValidationUtil.isValidDuration(txtDurationWeeks.getText())) {
+            showError(ValidationUtil.durationError());
+            highlight(txtDurationWeeks); txtDurationWeeks.requestFocus(); return false;
         }
+
+        // Fee
+        if (!ValidationUtil.isValidAmount(txtFee.getText())) {
+            showError(ValidationUtil.amountError());
+            highlight(txtFee); txtFee.requestFocus(); return false;
+        }
+
+        // Description length (optional)
+        if (!ValidationUtil.isWithinLimit(txtDescription.getText(), 500)) {
+            showError("⚠ Description cannot exceed 500 characters."); return false;
+        }
+
+        // Therapist required
+        if (cmbTherapist.getValue() == null) {
+            showError(ValidationUtil.requiredError("Therapist")); return false;
+        }
+
         return true;
+    }
+
+    // ── UI Helpers ────────────────────────────────────────────────────────────
+
+    private void highlight(TextField field) {
+        field.setStyle("-fx-border-color: #e74c3c; -fx-border-radius: 4;");
+    }
+
+    private void clearFieldStyles() {
+        txtName.setStyle(""); txtDurationWeeks.setStyle(""); txtFee.setStyle("");
     }
 
     private void showError(String msg) {

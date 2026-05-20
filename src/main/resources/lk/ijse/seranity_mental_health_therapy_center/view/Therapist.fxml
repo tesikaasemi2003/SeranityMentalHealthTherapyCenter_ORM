@@ -15,9 +15,7 @@
             <Label fx:id="lblMessage" style="-fx-font-size:13px;-fx-font-weight:bold;"
                    visible="false" managed="false"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="+ Add Therapist" onAction="#handleClear"
-                    style="-fx-background-color:#2B3990;-fx-text-fill:white;
-                           -fx-background-radius:8;-fx-padding:9 20;-fx-font-size:13px;-fx-cursor:hand;"/>
+
         </HBox>
 
         <HBox spacing="20" style="-fx-padding:0 24 24 24;" VBox.vgrow="ALWAYS">

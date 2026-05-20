@@ -14,6 +14,7 @@ import lk.ijse.seranity_mental_health_therapy_center.bo.BOTypes;
 import lk.ijse.seranity_mental_health_therapy_center.bo.custom.UserBO;
 import lk.ijse.seranity_mental_health_therapy_center.dto.tm.UserTM;
 import lk.ijse.seranity_mental_health_therapy_center.entity.User;
+import lk.ijse.seranity_mental_health_therapy_center.util.ValidationUtil;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.net.URL;
@@ -21,19 +22,28 @@ import java.util.ResourceBundle;
 
 public class UserController implements Initializable {
 
-    @FXML private TextField     txtId;
-    @FXML private TextField     txtUsername;
-    @FXML private PasswordField txtPassword;
-    @FXML private TextField     txtPasswordVisible;
-    @FXML private PasswordField txtConfirmPassword;
-    @FXML private PasswordField txtNewPassword;
+    // Form fields
+    @FXML private TextField        txtId;
+    @FXML private TextField        txtUsername;
+    @FXML private PasswordField    txtPassword;
+    @FXML private TextField        txtPasswordVisible;
+    @FXML private Button           btnShowPass;
+    @FXML private PasswordField    txtConfirmPassword;
     @FXML private ComboBox<String> cmbRole;
-    @FXML private Label         lblMessage;
-    @FXML private Button        btnSave;
-    @FXML private Button        btnShowPass;
-    @FXML private VBox          vboxChangePass;
-    @FXML private TextField     txtSearch;
 
+    // Change password section (edit mode only)
+    @FXML private VBox             vboxChangePass;
+    @FXML private PasswordField    txtNewPassword;
+    @FXML private TextField        txtNewPasswordVisible;
+    @FXML private Button           btnShowNewPass;
+    @FXML private PasswordField    txtConfirmNewPassword;
+
+    // UI
+    @FXML private Label            lblMessage;
+    @FXML private Button           btnSave;
+    @FXML private TextField        txtSearch;
+
+    // Table
     @FXML private TableView<UserTM>           tblUser;
     @FXML private TableColumn<UserTM, String> colId;
     @FXML private TableColumn<UserTM, String> colUsername;
@@ -44,12 +54,11 @@ public class UserController implements Initializable {
             (UserBO) BOFactory.getInstance().getBO(BOTypes.USER);
 
     private final ObservableList<UserTM> masterList = FXCollections.observableArrayList();
-    private boolean isEditMode    = false;
-    private boolean showPassword  = false;
-    private String  editingUserId = null;
 
-    private static final String USERNAME_REGEX = "^[a-zA-Z0-9._]{3,30}$";
-    private static final String PASSWORD_REGEX = "^.{6,}$";
+    private boolean isEditMode    = false;
+    private boolean showPass      = false;
+    private boolean showNewPass   = false;
+    private String  editingUserId = null;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -58,87 +67,59 @@ public class UserController implements Initializable {
         setupSearch();
         loadTableData();
         generateNextId();
+        syncPasswordFields();
+    }
 
-        // Password visible field sync
+    private void syncPasswordFields() {
         txtPasswordVisible.textProperty().addListener((obs, o, val) -> {
-            if (showPassword) txtPassword.setText(val);
+            if (showPass) txtPassword.setText(val);
+        });
+        txtPassword.textProperty().addListener((obs, o, val) -> {
+            if (!showPass) txtPasswordVisible.setText(val);
+        });
+        txtNewPasswordVisible.textProperty().addListener((obs, o, val) -> {
+            if (showNewPass) txtNewPassword.setText(val);
+        });
+        txtNewPassword.textProperty().addListener((obs, o, val) -> {
+            if (!showNewPass) txtNewPasswordVisible.setText(val);
         });
     }
 
-    private void generateNextId() {
-        try {
-            User last = userBO.getAllUsers().stream()
-                    .max((a, b) -> a.getId().compareTo(b.getId()))
-                    .orElse(null);
-            if (last == null) { txtId.setText("U001"); return; }
-            int num = Integer.parseInt(last.getId().substring(1)) + 1;
-            txtId.setText(String.format("U%03d", num));
-        } catch (Exception e) { txtId.setText("U001"); }
-    }
-
-    private void setupTable() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
-        colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
-
-        colAction.setCellFactory(col -> new TableCell<>() {
-            private final Button btnEdit   = new Button("Edit");
-            private final Button btnDelete = new Button("Delete");
-            private final HBox box = new HBox(6, btnEdit, btnDelete);
-            {
-                btnEdit.setStyle("-fx-background-color:#2B3990;-fx-text-fill:white;" +
-                        "-fx-background-radius:5;-fx-padding:4 10;-fx-cursor:hand;-fx-font-size:11px;");
-                btnDelete.setStyle("-fx-background-color:#e74c3c;-fx-text-fill:white;" +
-                        "-fx-background-radius:5;-fx-padding:4 10;-fx-cursor:hand;-fx-font-size:11px;");
-                btnEdit.setOnAction(e   -> populateForm(getTableView().getItems().get(getIndex())));
-                btnDelete.setOnAction(e -> handleDelete(getTableView().getItems().get(getIndex())));
-            }
-            @Override protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
-            }
-        });
-    }
-
-    private void setupSearch() {
-        FilteredList<UserTM> filtered = new FilteredList<>(masterList, p -> true);
-        txtSearch.textProperty().addListener((obs, o, val) -> filtered.setPredicate(row -> {
-            if (val == null || val.isEmpty()) return true;
-            String lower = val.toLowerCase();
-            return row.getUsername().toLowerCase().contains(lower)
-                    || row.getRole().toLowerCase().contains(lower);
-        }));
-        tblUser.setItems(filtered);
-    }
-
-    private void loadTableData() {
-        masterList.clear();
-        try {
-            for (User u : userBO.getAllUsers()) {
-                masterList.add(new UserTM(u.getId(), u.getUsername(), u.getRole()));
-            }
-        } catch (Exception e) {
-            showError("Failed to load: " + e.getMessage());
+    // Password toggle — create
+    @FXML
+    private void handleTogglePassword() {
+        showPass = !showPass;
+        if (showPass) {
+            txtPasswordVisible.setText(txtPassword.getText());
+            txtPasswordVisible.setVisible(true);  txtPasswordVisible.setManaged(true);
+            txtPassword.setVisible(false);         txtPassword.setManaged(false);
+            btnShowPass.setText("🙈");
+            txtPasswordVisible.requestFocus();
+        } else {
+            txtPassword.setText(txtPasswordVisible.getText());
+            txtPassword.setVisible(true);          txtPassword.setManaged(true);
+            txtPasswordVisible.setVisible(false);  txtPasswordVisible.setManaged(false);
+            btnShowPass.setText("👁");
+            txtPassword.requestFocus();
         }
     }
 
+    // Password toggle — change (edit mode)
     @FXML
-    private void handleTogglePassword() {
-        showPassword = !showPassword;
-        if (showPassword) {
-            txtPasswordVisible.setText(txtPassword.getText());
-            txtPasswordVisible.setVisible(true);
-            txtPasswordVisible.setManaged(true);
-            txtPassword.setVisible(false);
-            txtPassword.setManaged(false);
-            btnShowPass.setText("🙈");
+    private void handleToggleNewPassword() {
+        showNewPass = !showNewPass;
+        if (showNewPass) {
+            txtNewPasswordVisible.setText(txtNewPassword.getText());
+            txtNewPasswordVisible.setVisible(true);  txtNewPasswordVisible.setManaged(true);
+            txtNewPassword.setVisible(false);         txtNewPassword.setManaged(false);
+            btnShowNewPass.setText("🙈");
+            txtNewPasswordVisible.requestFocus();
         } else {
-            txtPassword.setText(txtPasswordVisible.getText());
-            txtPassword.setVisible(true);
-            txtPassword.setManaged(true);
-            txtPasswordVisible.setVisible(false);
-            txtPasswordVisible.setManaged(false);
-            btnShowPass.setText("👁");
+            txtNewPassword.setText(txtNewPasswordVisible.getText());
+            txtNewPassword.setVisible(true);          txtNewPassword.setManaged(true);
+            txtNewPasswordVisible.setVisible(false);  txtNewPasswordVisible.setManaged(false);
+            btnShowNewPass.setText("👁");
+            txtNewPassword.requestFocus();
         }
     }
 
@@ -146,144 +127,139 @@ public class UserController implements Initializable {
     private void handleSave() {
         hideMessage();
         if (!validateInputs()) return;
-
         try {
-            String rawPassword = showPassword
-                    ? txtPasswordVisible.getText().trim()
-                    : txtPassword.getText().trim();
-
             User user = new User();
             user.setId(txtId.getText().trim());
             user.setUsername(txtUsername.getText().trim());
             user.setRole(cmbRole.getValue());
 
             if (!isEditMode) {
-                // BCrypt encrypt — coursework requirement
-                user.setPassword(BCrypt.hashpw(rawPassword, BCrypt.gensalt()));
-                if (userBO.saveUser(user)) {
-                    showSuccess("User saved successfully!");
-                    loadTableData();
-                    handleClear();
-                }
+                String rawPass = showPass
+                        ? txtPasswordVisible.getText().trim()
+                        : txtPassword.getText().trim();
+                user.setPassword(BCrypt.hashpw(rawPass, BCrypt.gensalt()));
+                if (userBO.saveUser(user)) { showSuccess("User saved!"); loadTableData(); handleClear(); }
             } else {
-                // Edit mode — new password typed නම් update, නැත්නම් existing keep
-                String newPass = txtNewPassword.getText().trim();
+                String newPass = showNewPass
+                        ? txtNewPasswordVisible.getText().trim()
+                        : txtNewPassword.getText().trim();
                 if (!newPass.isEmpty()) {
-                    if (!newPass.matches(PASSWORD_REGEX)) {
-                        showError("New password must be at least 6 characters."); return;
+                    if (!ValidationUtil.isStrongPassword(newPass)) {
+                        showError(ValidationUtil.strongPasswordError()); return;
+                    }
+                    if (!ValidationUtil.doPasswordsMatch(newPass, txtConfirmNewPassword.getText().trim())) {
+                        showError("New passwords do not match."); return;
                     }
                     user.setPassword(BCrypt.hashpw(newPass, BCrypt.gensalt()));
                 } else {
-                    // Existing password keep කරන්න
-                    User existing = userBO.searchUser(editingUserId);
-                    user.setPassword(existing.getPassword());
+                    user.setPassword(userBO.searchUser(editingUserId).getPassword());
                 }
-                if (userBO.updateUser(user)) {
-                    showSuccess("User updated successfully!");
-                    loadTableData();
-                    handleClear();
-                }
+                if (userBO.updateUser(user)) { showSuccess("User updated!"); loadTableData(); handleClear(); }
             }
-        } catch (Exception e) {
-            showError("Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+        } catch (Exception e) { showError("Error: " + e.getMessage()); e.printStackTrace(); }
     }
 
     private void populateForm(UserTM row) {
-        isEditMode    = true;
-        editingUserId = row.getId();
-        txtId.setText(row.getId());
-        txtUsername.setText(row.getUsername());
-        txtPassword.setText("");
-        txtConfirmPassword.setText("");
+        isEditMode = true; editingUserId = row.getId();
+        txtId.setText(row.getId()); txtUsername.setText(row.getUsername());
+        txtPassword.clear(); txtPasswordVisible.clear(); txtConfirmPassword.clear();
+        txtNewPassword.clear(); txtNewPasswordVisible.clear(); txtConfirmNewPassword.clear();
         cmbRole.setValue(row.getRole());
-        vboxChangePass.setVisible(true);
-        vboxChangePass.setManaged(true);
-        btnSave.setText("Update");
-        txtUsername.requestFocus();
+        vboxChangePass.setVisible(true); vboxChangePass.setManaged(true);
+        btnSave.setText("Update"); txtUsername.requestFocus(); hideMessage();
     }
 
     private void handleDelete(UserTM row) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "Delete user \"" + row.getUsername() + "\"?", ButtonType.YES, ButtonType.NO);
-        alert.setHeaderText("Confirm Delete");
-        alert.showAndWait().ifPresent(bt -> {
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete \"" + row.getUsername() + "\"?", ButtonType.YES, ButtonType.NO);
+        a.setHeaderText("Confirm Delete");
+        a.showAndWait().ifPresent(bt -> {
             if (bt == ButtonType.YES) {
                 try {
-                    if (userBO.deleteUser(row.getId())) {
-                        masterList.remove(row);
-                        showSuccess("User deleted.");
-                        generateNextId();
-                    }
-                } catch (Exception e) {
-                    showError("Delete failed: " + e.getMessage());
-                }
+                    if (userBO.deleteUser(row.getId())) { masterList.remove(row); showSuccess("Deleted."); generateNextId(); }
+                } catch (Exception e) { showError(e.getMessage()); }
             }
         });
     }
 
     @FXML
     private void handleClear() {
-        isEditMode    = false;
-        editingUserId = null;
-        txtUsername.clear();
-        txtPassword.clear();
-        txtPasswordVisible.clear();
-        txtConfirmPassword.clear();
-        txtNewPassword.clear();
+        isEditMode = false; editingUserId = null;
+        txtUsername.clear(); txtPassword.clear(); txtPasswordVisible.clear();
+        txtConfirmPassword.clear(); txtNewPassword.clear();
+        txtNewPasswordVisible.clear(); txtConfirmNewPassword.clear();
         cmbRole.setValue(null);
-        vboxChangePass.setVisible(false);
-        vboxChangePass.setManaged(false);
+        vboxChangePass.setVisible(false); vboxChangePass.setManaged(false);
         btnSave.setText("Save");
-
-        // Reset password field visibility
-        if (showPassword) handleTogglePassword();
-
-        generateNextId();
-        hideMessage();
+        if (showPass)    handleTogglePassword();
+        if (showNewPass) handleToggleNewPassword();
+        clearFieldStyles(); generateNextId(); hideMessage();
     }
 
     private boolean validateInputs() {
-        if (!txtUsername.getText().trim().matches(USERNAME_REGEX)) {
-            showError("Username must be 3-30 chars, letters/numbers/._");
-            txtUsername.requestFocus(); return false;
+        clearFieldStyles();
+        if (!ValidationUtil.isValidUsername(txtUsername.getText())) {
+            showError(ValidationUtil.usernameError()); highlight(txtUsername); txtUsername.requestFocus(); return false;
         }
-
-        // Edit mode ලා password fields skip කරන්න (change pass section use කරනවා)
         if (!isEditMode) {
-            String pass = showPassword
-                    ? txtPasswordVisible.getText().trim()
-                    : txtPassword.getText().trim();
+            String pass    = showPass ? txtPasswordVisible.getText().trim() : txtPassword.getText().trim();
             String confirm = txtConfirmPassword.getText().trim();
-
-            if (!pass.matches(PASSWORD_REGEX)) {
-                showError("Password must be at least 6 characters.");
-                txtPassword.requestFocus(); return false;
+            if (!ValidationUtil.isStrongPassword(pass)) {
+                showError(ValidationUtil.strongPasswordError()); return false;
             }
-            if (!pass.equals(confirm)) {
-                showError("Passwords do not match.");
-                txtConfirmPassword.requestFocus(); return false;
+            if (!ValidationUtil.doPasswordsMatch(pass, confirm)) {
+                showError(ValidationUtil.passwordMismatchError()); txtConfirmPassword.requestFocus(); return false;
             }
         }
-
-        if (cmbRole.getValue() == null) {
-            showError("Please select a Role."); return false;
-        }
+        if (cmbRole.getValue() == null) { showError(ValidationUtil.requiredError("Role")); return false; }
         return true;
     }
 
-    private void showError(String msg) {
-        lblMessage.setText("⚠ " + msg);
-        lblMessage.setStyle("-fx-text-fill:#c0392b;-fx-font-size:13px;-fx-font-weight:bold;");
-        lblMessage.setVisible(true); lblMessage.setManaged(true);
+    private void setupTable() {
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
+        colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
+        colAction.setCellFactory(col -> new TableCell<>() {
+            private final Button e = new Button("Edit");
+            private final Button d = new Button("Delete");
+            private final HBox   b = new HBox(6, e, d);
+            {
+                e.setStyle("-fx-background-color:#2B3990;-fx-text-fill:white;-fx-background-radius:5;-fx-padding:4 10;-fx-cursor:hand;-fx-font-size:11px;");
+                d.setStyle("-fx-background-color:#e74c3c;-fx-text-fill:white;-fx-background-radius:5;-fx-padding:4 10;-fx-cursor:hand;-fx-font-size:11px;");
+                e.setOnAction(ev -> populateForm(getTableView().getItems().get(getIndex())));
+                d.setOnAction(ev -> handleDelete(getTableView().getItems().get(getIndex())));
+            }
+            @Override protected void updateItem(Void item, boolean empty) { super.updateItem(item, empty); setGraphic(empty ? null : b); }
+        });
     }
-    private void showSuccess(String msg) {
-        lblMessage.setText("✔ " + msg);
-        lblMessage.setStyle("-fx-text-fill:#27ae60;-fx-font-size:13px;-fx-font-weight:bold;");
-        lblMessage.setVisible(true); lblMessage.setManaged(true);
+
+    private void setupSearch() {
+        FilteredList<UserTM> f = new FilteredList<>(masterList, p -> true);
+        txtSearch.textProperty().addListener((obs, o, val) -> f.setPredicate(row -> {
+            if (val == null || val.isEmpty()) return true;
+            String lower = val.toLowerCase();
+            return row.getUsername().toLowerCase().contains(lower) || row.getRole().toLowerCase().contains(lower);
+        }));
+        tblUser.setItems(f);
     }
-    private void hideMessage() {
-        lblMessage.setVisible(false); lblMessage.setManaged(false);
+
+    private void loadTableData() {
+        masterList.clear();
+        try { for (User u : userBO.getAllUsers()) masterList.add(new UserTM(u.getId(), u.getUsername(), u.getRole())); }
+        catch (Exception e) { showError("Failed to load: " + e.getMessage()); }
     }
+
+    private void generateNextId() {
+        try {
+            User last = userBO.getAllUsers().stream().max((a, b) -> a.getId().compareTo(b.getId())).orElse(null);
+            if (last == null) { txtId.setText("U001"); return; }
+            txtId.setText(String.format("U%03d", Integer.parseInt(last.getId().substring(1)) + 1));
+        } catch (Exception e) { txtId.setText("U001"); }
+    }
+
+    private void highlight(TextField f) { f.setStyle("-fx-border-color:#e74c3c;-fx-border-radius:4;"); }
+    private void clearFieldStyles() { txtUsername.setStyle(""); txtPassword.setStyle(""); txtConfirmPassword.setStyle(""); }
+    private void showError(String m) { lblMessage.setText("⚠ "+m); lblMessage.setStyle("-fx-text-fill:#c0392b;-fx-font-size:13px;-fx-font-weight:bold;"); lblMessage.setVisible(true); lblMessage.setManaged(true); }
+    private void showSuccess(String m) { lblMessage.setText("✔ "+m); lblMessage.setStyle("-fx-text-fill:#27ae60;-fx-font-size:13px;-fx-font-weight:bold;"); lblMessage.setVisible(true); lblMessage.setManaged(true); }
+    private void hideMessage() { lblMessage.setVisible(false); lblMessage.setManaged(false); }
 }

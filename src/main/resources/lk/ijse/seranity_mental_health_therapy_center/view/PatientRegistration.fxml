@@ -6,6 +6,8 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -25,18 +27,10 @@
     <HBox alignment="CENTER_LEFT" spacing="12"
           style="-fx-background-color: white; -fx-padding: 16 24;
                  -fx-border-color: #E0E8F8; -fx-border-width: 0 0 1 0;">
-        <VBox spacing="2">
-            <Label style="-fx-text-fill: #8899BB; -fx-font-size: 11px;" text="Patients  ›  Register" />
-            <Label style="-fx-text-fill: #2B3990; -fx-font-size: 17px; -fx-font-weight: BOLD;"
-                   text="New Patient Registration" />
-        </VBox>
         <Region HBox.hgrow="ALWAYS" />
         <Label fx:id="lblMessage"
                style="-fx-font-size: 13px; -fx-font-weight: bold;"
                visible="false" managed="false" />
-        <Button text="+ New Patient" onAction="#handleClear"
-                style="-fx-background-color: #2B3990; -fx-text-fill: white;
-                       -fx-background-radius: 8; -fx-padding: 9 20; -fx-font-size: 13px; -fx-cursor: hand;" />
     </HBox>
 
     <!-- SCROLL CONTENT -->
@@ -251,6 +245,44 @@
                                -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-size: 13px;"
                         text="Register Patient" />
             </HBox>
+
+            <!-- CARD 4: Registered Patients Table -->
+            <VBox spacing="14"
+                  style="-fx-background-color: white; -fx-padding: 24; -fx-background-radius: 12;
+                         -fx-effect: dropshadow(gaussian, #D0D8F0, 8, 0, 0, 2);">
+
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Registered Patients"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2B3990;" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="txtSearch"
+                               prefHeight="36" prefWidth="220"
+                               promptText="Search by name or NIC..."
+                               style="-fx-background-radius: 20; -fx-border-radius: 20;
+                                      -fx-border-color: #dce3ec; -fx-padding: 6 14;
+                                      -fx-font-size: 12px;" />
+                </HBox>
+
+                <Region prefHeight="1" style="-fx-background-color: #E0E8F8;" />
+
+                <TableView fx:id="tblPatients"
+                           prefHeight="320"
+                           style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                    <columns>
+                        <TableColumn fx:id="colId"     text="Patient ID" prefWidth="110" style="-fx-alignment: CENTER;" />
+                        <TableColumn fx:id="colName"   text="Full Name"  prefWidth="180" />
+                        <TableColumn fx:id="colNIC"    text="NIC"        prefWidth="140" />
+                        <TableColumn fx:id="colPhone"  text="Phone"      prefWidth="120" />
+                        <TableColumn fx:id="colEmail"  text="Email"      prefWidth="190" />
+                        <TableColumn fx:id="colAction" text="Actions"    prefWidth="110"
+                                     style="-fx-alignment: CENTER;" sortable="false" />
+                    </columns>
+                    <placeholder>
+                        <Label text="No patients registered yet."
+                               style="-fx-text-fill: #aaa; -fx-font-size: 13px;" />
+                    </placeholder>
+                </TableView>
+            </VBox>
 
         </VBox>
     </ScrollPane>
