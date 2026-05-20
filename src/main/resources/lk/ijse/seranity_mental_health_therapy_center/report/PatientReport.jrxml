@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="PatientReport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="782" leftMargin="30" rightMargin="30" topMargin="30" bottomMargin="30">
+
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+
+    <style name="Title" forecolor="#1A3A6B" fontSize="18" isBold="true"/>
+    <style name="Header" backcolor="#3DC4A8" forecolor="#FFFFFF" fontSize="11" isBold="true"/>
+    <style name="Detail" fontSize="10"/>
+    <style name="DetailAlt" backcolor="#EAF7F5" fontSize="10"/>
+
+    <parameter name="generatedDate" class="java.lang.String"/>
+
+    <queryString language="SQL">
+        <![CDATA[
+            SELECT p.id, p.name, p.nic, p.email, p.phone,
+                   COALESCE(p.medical_history, 'N/A') AS medical_history
+            FROM patient p ORDER BY p.name
+        ]]>
+    </queryString>
+
+    <field name="id"              class="java.lang.String"/>
+    <field name="name"            class="java.lang.String"/>
+    <field name="nic"             class="java.lang.String"/>
+    <field name="email"           class="java.lang.String"/>
+    <field name="phone"           class="java.lang.String"/>
+    <field name="medical_history" class="java.lang.String"/>
+
+    <variable name="rowCount" class="java.lang.Integer" calculation="Count">
+        <variableExpression><![CDATA[Boolean.TRUE]]></variableExpression>
+    </variable>
+
+    <title>
+        <band height="70">
+            <rectangle>
+                <reportElement x="0" y="0" width="782" height="60" backcolor="#1A3A6B" forecolor="#1A3A6B"/>
+                <graphicElement><pen lineWidth="0"/></graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="10" y="8" width="500" height="30" style="Title" forecolor="#FFFFFF"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Seranity Mental Health Therapy Center]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="10" y="36" width="300" height="18" forecolor="#3DC4A8"/>
+                <textElement><font size="12" isBold="true"/></textElement>
+                <text><![CDATA[Patient Report]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="560" y="36" width="220" height="16" forecolor="#AACCEE"/>
+                <textElement><font size="9"/></textElement>
+                <textFieldExpression><![CDATA["Generated: " + $P{generatedDate}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="26">
+            <rectangle>
+                <reportElement x="0" y="0" width="782" height="26" backcolor="#3DC4A8"/>
+                <graphicElement><pen lineWidth="0"/></graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="5"   y="5" width="70"  height="16" style="Header"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Patient ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="80"  y="5" width="140" height="16" style="Header"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Full Name]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="225" y="5" width="110" height="16" style="Header"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[NIC]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="340" y="5" width="170" height="16" style="Header"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Email]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="515" y="5" width="110" height="16" style="Header"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Phone]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="630" y="5" width="147" height="16" style="Header"/>
+                <textElement verticalAlignment="Middle"/>
+                <text><![CDATA[Medical History]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="22">
+            <rectangle>
+                <reportElement x="0" y="0" width="782" height="22" backcolor="#EAF7F5">
+                    <printWhenExpression><![CDATA[$V{rowCount} % 2 == 0]]></printWhenExpression>
+                </reportElement>
+                <graphicElement><pen lineWidth="0"/></graphicElement>
+            </rectangle>
+            <textField isBlankWhenNull="true">
+                <reportElement x="5"   y="4" width="70"  height="14" style="Detail"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="80"  y="4" width="140" height="14" style="Detail"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="225" y="4" width="110" height="14" style="Detail"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{nic}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="340" y="4" width="170" height="14" style="Detail"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="515" y="4" width="110" height="14" style="Detail"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true" textAdjust="StretchHeight">
+                <reportElement x="630" y="4" width="147" height="14" style="Detail"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{medical_history}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="22">
+            <line>
+                <reportElement x="0" y="0" width="782" height="1" forecolor="#3DC4A8"/>
+            </line>
+            <staticText>
+                <reportElement x="0" y="5" width="200" height="14" forecolor="#666666"/>
+                <textElement verticalAlignment="Middle"><font size="9"/></textElement>
+                <text><![CDATA[Seranity Mental Health Therapy Center]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="650" y="5" width="132" height="14" forecolor="#666666"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"><font size="9"/></textElement>
+                <textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+</jasperReport>

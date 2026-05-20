@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="TherapistPerformanceReport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="782" leftMargin="30" rightMargin="30" topMargin="30" bottomMargin="30">
+
+    <style name="Title"       forecolor="#1A3A6B" fontSize="18" isBold="true"/>
+    <style name="ColHeader"   backcolor="#2E7D55" forecolor="#FFFFFF" fontSize="10" isBold="true"/>
+    <style name="Detail"      fontSize="10"/>
+
+    <parameter name="generatedDate" class="java.lang.String"/>
+
+    <queryString language="SQL">
+        <![CDATA[
+            SELECT t.id AS therapist_id, t.name AS therapist_name,
+                   t.email AS therapist_email, t.phone AS therapist_phone,
+                   t.specialization, ts.id AS session_id, ts.session_date,
+                   ts.start_time, ts.end_time, ts.status AS session_status,
+                   p.name AS patient_name
+            FROM therapist t
+            LEFT JOIN therapy_session ts ON ts.therapist_id = t.id
+            LEFT JOIN patient p          ON ts.patient_id   = p.id
+            ORDER BY t.name ASC, ts.session_date DESC
+        ]]>
+    </queryString>
+
+    <field name="therapist_id"    class="java.lang.String"/>
+    <field name="therapist_name"  class="java.lang.String"/>
+    <field name="therapist_email" class="java.lang.String"/>
+    <field name="therapist_phone" class="java.lang.String"/>
+    <field name="specialization"  class="java.lang.String"/>
+    <field name="session_id"      class="java.lang.String"/>
+    <field name="session_date"    class="java.sql.Date"/>
+    <field name="start_time"      class="java.sql.Time"/>
+    <field name="end_time"        class="java.sql.Time"/>
+    <field name="session_status"  class="java.lang.String"/>
+    <field name="patient_name"    class="java.lang.String"/>
+
+    <variable name="completedCount" class="java.lang.Integer" resetType="Group" resetGroup="therapistGroup" calculation="Sum">
+        <variableExpression><![CDATA["COMPLETED".equals($F{session_status}) ? 1 : 0]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="scheduledCount" class="java.lang.Integer" resetType="Group" resetGroup="therapistGroup" calculation="Sum">
+        <variableExpression><![CDATA["SCHEDULED".equals($F{session_status}) ? 1 : 0]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="cancelledCount" class="java.lang.Integer" resetType="Group" resetGroup="therapistGroup" calculation="Sum">
+        <variableExpression><![CDATA["CANCELLED".equals($F{session_status}) ? 1 : 0]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="grandTotal" class="java.lang.Integer" calculation="Count">
+        <variableExpression><![CDATA[Boolean.TRUE]]></variableExpression>
+    </variable>
+
+    <group name="therapistGroup">
+        <groupExpression><![CDATA[$F{therapist_id}]]></groupExpression>
+        <groupHeader>
+            <band height="40">
+                <rectangle>
+                    <reportElement x="0" y="4" width="782" height="32" backcolor="#1A3A6B"/>
+                    <graphicElement><pen lineWidth="0"/></graphicElement>
+                </rectangle>
+                <textField isBlankWhenNull="true">
+                    <reportElement x="8" y="8" width="300" height="18" forecolor="#FFFFFF"/>
+                    <textElement><font size="12" isBold="true"/></textElement>
+                    <textFieldExpression><![CDATA[$F{therapist_name}]]></textFieldExpression>
+                </textField>
+                <textField isBlankWhenNull="true">
+                    <reportElement x="315" y="8" width="200" height="18" forecolor="#AACCEE"/>
+                    <textElement><font size="10"/></textElement>
+                    <textFieldExpression><![CDATA["Spec: " + ($F{specialization} != null ? $F{specialization} : "N/A")]]></textFieldExpression>
+                </textField>
+                <textField isBlankWhenNull="true">
+                    <reportElement x="520" y="8" width="180" height="18" forecolor="#AACCEE"/>
+                    <textElement><font size="10"/></textElement>
+                    <textFieldExpression><![CDATA["Email: " + ($F{therapist_email} != null ? $F{therapist_email} : "N/A")]]></textFieldExpression>
+                </textField>
+                <textField isBlankWhenNull="true">
+                    <reportElement x="705" y="8" width="72" height="18" forecolor="#AACCEE"/>
+                    <textElement><font size="10"/></textElement>
+                    <textFieldExpression><![CDATA["Ph: " + ($F{therapist_phone} != null ? $F{therapist_phone} : "N/A")]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupHeader>
+        <groupFooter>
+            <band height="36">
+                <rectangle>
+                    <reportElement x="0" y="2" width="782" height="30" backcolor="#EAF7F5"/>
+                    <graphicElement><pen lineWidth="0"/></graphicElement>
+                </rectangle>
+                <staticText>
+                    <reportElement x="8" y="8" width="120" height="16" forecolor="#1A3A6B"/>
+                    <textElement><font size="10" isBold="true"/></textElement>
+                    <text><![CDATA[Session Summary:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="135" y="8" width="150" height="16" forecolor="#333333"/>
+                    <textElement><font size="10"/></textElement>
+                    <textFieldExpression><![CDATA["Total: " + $V{therapistGroup_COUNT}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="290" y="8" width="160" height="16" forecolor="#1A7A4A"/>
+                    <textElement><font size="10" isBold="true"/></textElement>
+                    <textFieldExpression><![CDATA["Completed: " + $V{completedCount}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="455" y="8" width="160" height="16" forecolor="#1A3A6B"/>
+                    <textElement><font size="10" isBold="true"/></textElement>
+                    <textFieldExpression><![CDATA["Scheduled: " + $V{scheduledCount}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="620" y="8" width="157" height="16" forecolor="#CC4400"/>
+                    <textElement><font size="10" isBold="true"/></textElement>
+                    <textFieldExpression><![CDATA["Cancelled: " + $V{cancelledCount}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupFooter>
+    </group>
+
+    <title>
+        <band height="70">
+            <rectangle>
+                <reportElement x="0" y="0" width="782" height="60" backcolor="#1A3A6B"/>
+                <graphicElement><pen lineWidth="0"/></graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="10" y="8" width="500" height="28" forecolor="#FFFFFF"/>
+                <textElement><font size="18" isBold="true"/></textElement>
+                <text><![CDATA[Seranity Mental Health Therapy Center]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="10" y="36" width="400" height="18" forecolor="#3DC4A8"/>
+                <textElement><font size="12"/></textElement>
+                <text><![CDATA[Therapist Performance Report]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="560" y="36" width="220" height="16" forecolor="#AACCEE"/>
+                <textElement><font size="9"/></textElement>
+                <textFieldExpression><![CDATA["Generated: " + $P{generatedDate}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="22">
+            <rectangle>
+                <reportElement x="0" y="0" width="782" height="22" backcolor="#2E7D55"/>
+                <graphicElement><pen lineWidth="0"/></graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="5"   y="4" width="80"  height="14" style="ColHeader"/>
+                <text><![CDATA[Session ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="90"  y="4" width="90"  height="14" style="ColHeader"/>
+                <text><![CDATA[Date]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="185" y="4" width="65"  height="14" style="ColHeader"/>
+                <text><![CDATA[Start]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="255" y="4" width="65"  height="14" style="ColHeader"/>
+                <text><![CDATA[End]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="325" y="4" width="300" height="14" style="ColHeader"/>
+                <text><![CDATA[Patient]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="630" y="4" width="147" height="14" style="ColHeader"/>
+                <text><![CDATA[Status]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="20">
+            <printWhenExpression><![CDATA[$F{session_id} != null]]></printWhenExpression>
+            <textField isBlankWhenNull="true">
+                <reportElement x="5"   y="3" width="80"  height="14" style="Detail"/>
+                <textFieldExpression><![CDATA[$F{session_id}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="90"  y="3" width="90"  height="14" style="Detail"/>
+                <textFieldExpression><![CDATA[$F{session_date}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="185" y="3" width="65"  height="14" style="Detail"/>
+                <textFieldExpression><![CDATA[$F{start_time}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="255" y="3" width="65"  height="14" style="Detail"/>
+                <textFieldExpression><![CDATA[$F{end_time}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="325" y="3" width="300" height="14" style="Detail"/>
+                <textFieldExpression><![CDATA[$F{patient_name}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="630" y="3" width="147" height="14" forecolor="#1A7A4A">
+                    <printWhenExpression><![CDATA["COMPLETED".equals($F{session_status})]]></printWhenExpression>
+                </reportElement>
+                <textElement><font isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{session_status}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="630" y="3" width="147" height="14" forecolor="#1A3A6B">
+                    <printWhenExpression><![CDATA["SCHEDULED".equals($F{session_status})]]></printWhenExpression>
+                </reportElement>
+                <textElement><font isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{session_status}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="630" y="3" width="147" height="14" forecolor="#CC4400">
+                    <printWhenExpression><![CDATA["CANCELLED".equals($F{session_status})]]></printWhenExpression>
+                </reportElement>
+                <textElement><font isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{session_status}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="22">
+            <line>
+                <reportElement x="0" y="0" width="782" height="1" forecolor="#2E7D55"/>
+            </line>
+            <staticText>
+                <reportElement x="0" y="5" width="300" height="14" forecolor="#666666"/>
+                <textElement><font size="9"/></textElement>
+                <text><![CDATA[Seranity Mental Health Therapy Center — Admin Report]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="650" y="5" width="132" height="14" forecolor="#666666"/>
+                <textElement textAlignment="Right"><font size="9"/></textElement>
+                <textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <summary>
+        <band height="40">
+            <line>
+                <reportElement x="0" y="2" width="782" height="1" forecolor="#1A3A6B"/>
+            </line>
+            <staticText>
+                <reportElement x="5" y="10" width="200" height="16" forecolor="#1A3A6B"/>
+                <textElement><font size="11" isBold="true"/></textElement>
+                <text><![CDATA[Overall Total Sessions:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="210" y="10" width="100" height="16" forecolor="#1A3A6B"/>
+                <textElement><font size="11" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$V{grandTotal}]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>

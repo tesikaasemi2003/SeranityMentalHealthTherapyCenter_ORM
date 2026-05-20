@@ -14,6 +14,7 @@ import lk.ijse.seranity_mental_health_therapy_center.bo.BOFactory;
 import lk.ijse.seranity_mental_health_therapy_center.bo.BOTypes;
 import lk.ijse.seranity_mental_health_therapy_center.bo.custom.*;
 import lk.ijse.seranity_mental_health_therapy_center.entity.User;
+import lk.ijse.seranity_mental_health_therapy_center.util.ReportUtil;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,6 +48,12 @@ public class DashboardController implements Initializable {
     @FXML private Button btnQuickSession;
     @FXML private Button btnQuickReg;
     @FXML private Button btnLogout;
+
+    // ── Report Buttons ──────────────────────────────────────────────
+    @FXML private Button btnReportPatients;
+    @FXML private Button btnReportPayments;
+    @FXML private Button btnReportSessions;
+    @FXML private Button btnReportPerformance;
 
     private Button activeButton;
     private User loggedUser;
@@ -110,6 +117,9 @@ public class DashboardController implements Initializable {
         if (user.getRole().equalsIgnoreCase("RECEPTIONIST")) {
             btnUsers.setVisible(false);
             btnUsers.setManaged(false);
+            // Therapist Performance Report — Admin only
+            btnReportPerformance.setVisible(false);
+            btnReportPerformance.setManaged(false);
         }
         loadDashboardStats();
     }
@@ -209,6 +219,57 @@ public class DashboardController implements Initializable {
         if (activeButton != null) activeButton.setStyle(STYLE_INACTIVE);
         btn.setStyle(STYLE_ACTIVE);
         activeButton = btn;
+    }
+
+    // ── Report Handlers ─────────────────────────────────────────────
+
+    @FXML
+    public void handleReportPatients(ActionEvent event) {
+        try {
+            ReportUtil.showPatientReport();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Report Error", "Could not generate Patient Report:\n" + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void handleReportPayments(ActionEvent event) {
+        try {
+            ReportUtil.showPaymentReport();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Report Error", "Could not generate Payment Report:\n" + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void handleReportSessions(ActionEvent event) {
+        try {
+            ReportUtil.showTherapySessionReport();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Report Error", "Could not generate Therapy Session Report:\n" + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void handleReportPerformance(ActionEvent event) {
+        try {
+            ReportUtil.showTherapistPerformanceReport();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Report Error", "Could not generate Therapist Performance Report:\n" + e.getMessage());
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        javafx.scene.control.Alert alert =
+                new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML
